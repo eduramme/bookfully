@@ -37,7 +37,7 @@ const BookingDate = styled.div`
 `;
 
 // Sample data for bookings
-const bookings = [
+const properties = [
   { id: 1, name: "Ocean View Apartment", date: "2023-12-24" },
   { id: 2, name: "Cozy Mountain Cabin", date: "2023-12-25" },
   { id: 3, name: "Safe House Apartment", date: "2023-12-25" },
@@ -50,7 +50,7 @@ function PropertiesPage() {
         <PageTitle>Properties</PageTitle>
       </PageHeader>
       <BookingGrid>
-        {bookings.map((booking) => (
+        {properties.map((booking) => (
           <BookingCard key={booking.id}>
             <BookingInfo>
               <BookingName>{booking.name}</BookingName>
