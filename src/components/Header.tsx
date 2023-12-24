@@ -46,15 +46,15 @@ const StyledLink = styled(Link)`
 `;
 
 const LogoImage = styled.img`
-  height: 25px; // Adjust the size as needed
-  width: auto; // Maintain aspect ratio
-  cursor: pointer; // Change cursor to indicate it's clickable
+  height: 25px;
+  width: auto;
 `;
 
 const LogoContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Header: React.FC = () => {

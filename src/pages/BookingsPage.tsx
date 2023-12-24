@@ -1,8 +1,14 @@
+import { PageContainer } from "../components/PageContainer";
+import { PageHeader } from "../components/PageHeader";
+import { PageTitle } from "../components/PageTitle";
+
 const BookingsPage = () => {
   return (
-    <div>
-      <h1>Bookings</h1>
-    </div>
+    <PageContainer>
+      <PageHeader>
+        <PageTitle>Bookings</PageTitle>
+      </PageHeader>
+    </PageContainer>
   );
 };
 
