@@ -1,3 +1,4 @@
+import DatePickerComponent from "../components/DatePciker";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";
@@ -75,6 +76,7 @@ const BookingsPage: React.FC = () => {
           </BookingCard>
         ))}
       </BookingList>
+      <DatePickerComponent />
     </PageContainer>
   );
 };
