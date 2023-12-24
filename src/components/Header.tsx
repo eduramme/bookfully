@@ -1,0 +1,78 @@
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { colors } from "../styles/theme";
+
+const HeaderWrapper = styled.header`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: white;
+`;
+
+const HeaderContainer = styled.header`
+  display: flex;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 2spx 4px ${colors.shadow};
+  padding: 0.5rem 1rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+`;
+
+const Logo = styled.h1`
+  margin: 0 0 0 10px;
+  color: ${colors.primary};
+  font-size: 1.5rem;
+`;
+
+const Nav = styled.nav`
+  margin-left: auto;
+  display: flex;
+  gap: 1rem;
+`;
+
+const StyledLink = styled(Link)`
+  color: ${colors.text};
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: ${colors.hover};
+    color: white;
+  }
+`;
+
+const LogoImage = styled.img`
+  height: 25px; // Adjust the size as needed
+  width: auto; // Maintain aspect ratio
+  cursor: pointer; // Change cursor to indicate it's clickable
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Header: React.FC = () => {
+  return (
+    <HeaderWrapper>
+      <HeaderContainer>
+        <LogoContainer>
+          <LogoImage src="/src/assets/logo.png" alt="MyApp Logo" />
+          <Logo>Bookfully</Logo>
+        </LogoContainer>
+
+        <Nav>
+          <StyledLink to="/">Properties</StyledLink>
+          <StyledLink to="/bookings">Bookings</StyledLink>
+        </Nav>
+      </HeaderContainer>
+    </HeaderWrapper>
+  );
+};
+
+export default Header;
