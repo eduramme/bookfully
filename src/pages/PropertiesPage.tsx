@@ -3,6 +3,7 @@ import { colors } from "./../styles/theme.ts";
 import { PageContainer } from "../components/PageContainer.tsx";
 import { PageHeader } from "../components/PageHeader.tsx";
 import { PageTitle } from "../components/PageTitle.tsx";
+import { useNavigate } from "react-router-dom";
 
 const BookingGrid = styled.div`
   display: grid;
@@ -44,17 +45,27 @@ const properties = [
 ];
 
 function PropertiesPage() {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const goToPropertiesDetails = (propertyId: number) => {
+    navigate(`/properties/${propertyId}`); // Navigate to BookingDetailsPage for the clicked booking
+  };
+
   return (
     <PageContainer>
       <PageHeader>
         <PageTitle>Properties</PageTitle>
       </PageHeader>
       <BookingGrid>
-        {properties.map((booking) => (
-          <BookingCard key={booking.id}>
+        {properties.map((property) => (
+          <BookingCard
+            key={property.id}
+            onClick={() => goToPropertiesDetails(property.id)}
+          >
             <BookingInfo>
-              <BookingName>{booking.name}</BookingName>
-              <BookingDate>{booking.date}</BookingDate>
+              <BookingName>{property.name}</BookingName>
+              <BookingDate>{property.date}</BookingDate>
+              <BookingDate>id: {property.id}</BookingDate>
             </BookingInfo>
           </BookingCard>
         ))}

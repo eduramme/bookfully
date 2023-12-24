@@ -1,8 +1,17 @@
-const BookingDetailsPage = () => {
+import DatePickerComponent from "../components/DatePciker";
+import { PageContainer } from "../components/PageContainer";
+import { PageHeader } from "../components/PageHeader";
+import { PageTitle } from "../components/PageTitle";
+
+const BookingDetailsPage: React.FC = () => {
   return (
-    <div>
-      <h1>Booking deatails</h1>
-    </div>
+    <PageContainer>
+      <PageHeader>
+        <PageTitle>Booking </PageTitle>
+      </PageHeader>
+
+      <DatePickerComponent />
+    </PageContainer>
   );
 };
 

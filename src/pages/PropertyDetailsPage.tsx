@@ -1,8 +1,20 @@
-const PropertyDetailsPage = () => {
+import DatePickerComponent from "../components/DatePciker";
+import { PageContainer } from "../components/PageContainer";
+import { PageHeader } from "../components/PageHeader";
+import { PageTitle } from "../components/PageTitle";
+import { useParams } from "react-router-dom";
+
+const PropertyDetailsPage: React.FC = () => {
+  const { id } = useParams();
+
   return (
-    <div>
-      <h1>Property details</h1>
-    </div>
+    <PageContainer>
+      <PageHeader>
+        <PageTitle>Property {id}</PageTitle>
+      </PageHeader>
+
+      <DatePickerComponent />
+    </PageContainer>
   );
 };
 
