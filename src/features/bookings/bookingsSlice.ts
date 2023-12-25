@@ -1,13 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Booking } from "../../types/booking";
+import { Booking, BookingsState } from "../../types/booking";
 
-const initialState: { bookings: Booking[] } = {
+const initialState: BookingsState = {
   bookings: [],
+  editLoading: false,
+  editError: null,
 };
 
 const bookingsSlice = createSlice({
   name: "bookings",
   initialState,
+  // NOTE: In a real-world application, these actions would likely trigger an
+  // asynchronous call to an API to CRUD the booking on the server. Here,
+  // we're directly updating the state to simulate the CRUD for the purposes
+  // of a front-end challenge.
   reducers: {
     setBookings(state, action: PayloadAction<Booking[]>) {
       state.bookings = action.payload;

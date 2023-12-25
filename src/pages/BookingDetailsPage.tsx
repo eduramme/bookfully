@@ -56,11 +56,11 @@ const BookingDetailsPage: React.FC = () => {
     )
   );
 
-  const dispatch = useDispatch(); // Use useDispatch to dispatch actions
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!booking) {
-      navigate("/404"); // navigate instead of push
+      navigate("/404");
     }
     if (booking) {
       setStartDate(new Date(booking.startDate));
@@ -71,13 +71,21 @@ const BookingDetailsPage: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (booking && startDate && endDate) {
-      dispatch(
-        editBooking({
-          ...booking,
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
-        })
-      );
+      // Note: In a real application, this would likely involve an API call
+      // to update the booking on the server. For this challenge, we're directly
+      // dispatching the editBooking action to update the state locally.
+      try {
+        dispatch(
+          editBooking({
+            ...booking,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+          })
+        );
+        navigate("/bookings");
+      } catch (error) {
+        console.log("Failed to update booking.");
+      }
     }
   };
 
