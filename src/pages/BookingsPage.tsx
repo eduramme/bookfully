@@ -6,6 +6,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { removeBooking } from "../features/bookings/bookingsSlice";
+import { useNavigate } from "react-router-dom";
 
 const BookingList = styled.ul`
   list-style: none;
@@ -41,6 +42,12 @@ const BookingsPage: React.FC = () => {
     console.log("Removed booking with ID:", bookingId);
   };
 
+  const navigate = useNavigate();
+
+  const goToBookingDetails = (bookingId: number) => {
+    navigate(`/bookings/${bookingId}`);
+  };
+
   return (
     <PageContainer>
       <PageHeader>
@@ -50,7 +57,7 @@ const BookingsPage: React.FC = () => {
         {bookings.map((booking) => (
           <BookingCard
             key={booking.id}
-            onClick={() => handleRemoveBooking(booking.id)} // Change to appropriate handler
+            onClick={() => goToBookingDetails(booking.id)}
           >
             <BookingInfo>
               <div>Booking ID: {booking.id}</div>
@@ -58,6 +65,7 @@ const BookingsPage: React.FC = () => {
               <div>End Date: {booking.endDate}</div>
               <div>Property ID: {booking.propertyId}</div>
             </BookingInfo>
+            <div onClick={() => handleRemoveBooking(booking.id)}>Delete</div>
           </BookingCard>
         ))}
       </BookingList>

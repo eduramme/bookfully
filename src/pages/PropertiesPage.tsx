@@ -45,10 +45,10 @@ const properties = [
 ];
 
 function PropertiesPage() {
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const goToPropertiesDetails = (propertyId: number) => {
-    navigate(`/properties/${propertyId}`); // Navigate to BookingDetailsPage for the clicked booking
+    navigate(`/properties/${propertyId}`);
   };
 
   return (
