@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";
@@ -8,6 +8,7 @@ import DatePickerComponent from "../components/DatePicker";
 import { colors } from "../styles/theme";
 import { useDispatch } from "react-redux";
 import { addBooking } from "../features/bookings/bookingsSlice";
+import { properties } from "../utils/properties";
 
 const BookingForm = styled.form`
   display: flex;
@@ -43,27 +44,66 @@ const DateContainer = styled.div`
   flex-direction: column;
 `;
 
+const DetailItem = styled.div`
+  margin-bottom: 10px;
+`;
+
+const AmenitiesList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const AmenityItem = styled.li`
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  background: ${colors.lightgray};
+  padding: 5px 10px;
+  border-radius: 15px;
+`;
+
+const HouseRulesList = styled(AmenitiesList)``;
+const HouseRuleItem = styled(AmenityItem)``;
+
+const ImageGallery = styled.div`
+  display: flex;
+  overflow-x: auto;
+  margin-top: 20px;
+`;
+
+const PropertyImage = styled.img`
+  height: 200px;
+  margin-right: 10px;
+  border-radius: 8px;
+`;
+
 const PropertyDetailsPage: React.FC = () => {
   const { id } = useParams();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch(); // Use useDispatch to dispatch actions
+  const dispatch = useDispatch();
 
   const handleBooking = (event: React.FormEvent) => {
     event.preventDefault();
     if (startDate && endDate && id) {
-      dispatch(
-        addBooking({
-          id: Date.now(), // Temporary way to generate a unique id
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
-          propertyId: parseInt(id),
-        })
-      );
-      console.log(
-        `Booking added for property ${id} from ${startDate} to ${endDate}`
-      );
+      try {
+        dispatch(
+          addBooking({
+            id: Date.now(), // Temporary way to generate a unique id
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+            propertyId: parseInt(id),
+          })
+        );
+        console.log(
+          `Booking added for property ${id} from ${startDate} to ${endDate}`
+        );
+        navigate("/");
+      } catch (error) {
+        console.log("Failed to update booking.", error);
+      }
     } else {
       console.error("Missing start date, end date, or property ID");
     }
@@ -71,15 +111,67 @@ const PropertyDetailsPage: React.FC = () => {
 
   const today = new Date();
 
+  const property = properties.filter(
+    (prop) => prop.id === parseInt(id ?? "0")
+  )[0];
+
   return (
     <PageContainer>
       <PageHeader>
-        <PageTitle>Property {id}</PageTitle>
+        <PageTitle>{property.name}</PageTitle>
       </PageHeader>
 
       <PropertyDetail>
+        <ImageGallery>
+          {property.imageUrls.map((url, index) => (
+            <PropertyImage
+              key={index}
+              src={url}
+              alt={`Property Image ${index + 1}`}
+            />
+          ))}
+        </ImageGallery>
         <h2>Property Details</h2>
-        <p>Description of Property {id}</p>
+        <DetailItem>
+          <strong>Description:</strong> {property.description}
+        </DetailItem>
+        <DetailItem>
+          <strong>Price Per Day:</strong> ${property.pricePerDay.toFixed(2)}
+        </DetailItem>
+        <DetailItem>
+          <strong>Taxes:</strong> ${property.taxes.toFixed(2)}
+        </DetailItem>
+        <DetailItem>
+          <strong>Address:</strong> {property.address}
+        </DetailItem>
+        <DetailItem>
+          <strong>Max Guests:</strong> {property.maxGuests}
+        </DetailItem>
+        <DetailItem>
+          <strong>Bedrooms:</strong> {property.bedrooms}
+        </DetailItem>
+        <DetailItem>
+          <strong>Beds:</strong> {property.beds}
+        </DetailItem>
+        <DetailItem>
+          <strong>Bathrooms:</strong> {property.bathrooms}
+        </DetailItem>
+        <DetailItem>
+          <strong>Amenities:</strong>
+          <AmenitiesList>
+            {property.amenities.map((amenity, index) => (
+              <AmenityItem key={index}>{amenity}</AmenityItem>
+            ))}
+          </AmenitiesList>
+        </DetailItem>
+        <DetailItem>
+          <strong>House Rules:</strong>
+          <HouseRulesList>
+            {property.houseRules.map((rule, index) => (
+              <HouseRuleItem key={index}>{rule}</HouseRuleItem>
+            ))}
+          </HouseRulesList>
+        </DetailItem>
       </PropertyDetail>
 
       <BookingForm onSubmit={handleBooking}>

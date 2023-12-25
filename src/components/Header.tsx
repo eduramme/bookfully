@@ -21,10 +21,14 @@ const HeaderContainer = styled.header`
   margin: auto;
 `;
 
-const Logo = styled.h1`
+const LogoText = styled.h1`
   margin: 0 0 0 10px;
   color: ${colors.primary};
   font-size: 1.5rem;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Nav = styled.nav`
@@ -63,7 +67,7 @@ const Header: React.FC = () => {
       <HeaderContainer>
         <LogoContainer>
           <LogoImage src="/src/assets/logo.png" alt="MyApp Logo" />
-          <Logo>Bookfully</Logo>
+          <LogoText>Bookfully</LogoText>
         </LogoContainer>
 
         <Nav>

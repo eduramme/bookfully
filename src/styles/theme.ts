@@ -5,6 +5,7 @@ export const colors: {
   card: string;
   hover: string;
   shadow: string;
+  lightgray: string;
 } = {
   primary: "#FF385C",
   background: "#F7F7F7",
@@ -12,4 +13,5 @@ export const colors: {
   card: "#FFFFFF",
   hover: "#FF5A5F",
   shadow: "rgba(0, 0, 0, 0.1)",
+  lightgray: "#f0f0f0",
 };

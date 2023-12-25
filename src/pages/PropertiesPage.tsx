@@ -1,18 +1,19 @@
 import styled from "styled-components";
-import { colors } from "./../styles/theme.ts";
-import { PageContainer } from "../components/PageContainer.tsx";
-import { PageHeader } from "../components/PageHeader.tsx";
-import { PageTitle } from "../components/PageTitle.tsx";
 import { useNavigate } from "react-router-dom";
+import { properties } from "../utils/properties";
+import { PageContainer } from "../components/PageContainer";
+import { PageHeader } from "../components/PageHeader";
+import { PageTitle } from "../components/PageTitle";
+import { colors } from "../styles/theme";
 
-const BookingGrid = styled.div`
+const PropertyGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 `;
 
-const BookingCard = styled.div`
-  background: ${colors.card};
+const PropertyCard = styled.div`
+  background: ${colors.lightgray};
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -23,26 +24,31 @@ const BookingCard = styled.div`
   }
 `;
 
-const BookingInfo = styled.div`
+const PropertyImage = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+`;
+
+const PropertyInfo = styled.div`
   padding: 20px;
 `;
 
-const BookingName = styled.h2`
+const PropertyName = styled.h2`
   margin: 0 0 10px 0;
   color: ${colors.text};
 `;
 
-const BookingDate = styled.div`
+const PropertyDetails = styled.div`
   color: ${colors.text};
   font-size: 0.9rem;
+  margin-bottom: 5px;
 `;
 
-// Sample data for bookings
-const properties = [
-  { id: 1, name: "Ocean View Apartment", date: "2023-12-24" },
-  { id: 2, name: "Cozy Mountain Cabin", date: "2023-12-25" },
-  { id: 3, name: "Safe House Apartment", date: "2023-12-25" },
-];
+const PricePerDay = styled.div`
+  font-weight: bold;
+  color: ${colors.text};
+`;
 
 function PropertiesPage() {
   const navigate = useNavigate();
@@ -56,20 +62,33 @@ function PropertiesPage() {
       <PageHeader>
         <PageTitle>Properties</PageTitle>
       </PageHeader>
-      <BookingGrid>
+      <PropertyGrid>
         {properties.map((property) => (
-          <BookingCard
+          <PropertyCard
             key={property.id}
             onClick={() => goToPropertiesDetails(property.id)}
           >
-            <BookingInfo>
-              <BookingName>{property.name}</BookingName>
-              <BookingDate>{property.date}</BookingDate>
-              <BookingDate>id: {property.id}</BookingDate>
-            </BookingInfo>
-          </BookingCard>
+            {property.imageUrls[0] && (
+              <PropertyImage src={property.imageUrls[0]} alt={property.name} />
+            )}
+            <PropertyInfo>
+              <PropertyName>{property.name}</PropertyName>
+              <PropertyDetails>{property.description}</PropertyDetails>
+              <PropertyDetails>
+                Max Guests: {property.maxGuests}
+              </PropertyDetails>
+              <PropertyDetails>
+                Bedrooms: {property.bedrooms} | Beds: {property.beds} |
+                Bathrooms: {property.bathrooms}
+              </PropertyDetails>
+              <PropertyDetails>Address: {property.address}</PropertyDetails>
+              <PricePerDay>
+                ${property.pricePerDay.toFixed(2)} / night
+              </PricePerDay>
+            </PropertyInfo>
+          </PropertyCard>
         ))}
-      </BookingGrid>
+      </PropertyGrid>
     </PageContainer>
   );
 }

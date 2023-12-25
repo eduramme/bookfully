@@ -9,6 +9,7 @@ import { colors } from "../styles/theme";
 import { useSelector, useDispatch } from "react-redux";
 import { editBooking } from "../features/bookings/bookingsSlice";
 import { RootState } from "../store";
+import { properties } from "../utils/properties";
 
 const BookingForm = styled.form`
   display: flex;
@@ -18,6 +19,7 @@ const BookingForm = styled.form`
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 `;
 
 const SubmitButton = styled.button`
@@ -44,9 +46,21 @@ const DateContainer = styled.div`
   flex-direction: column;
 `;
 
+const PropertyImage = styled.img`
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+`;
+
+const DetailItem = styled.div`
+  margin-bottom: 10px;
+`;
+
 const BookingDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -56,15 +70,17 @@ const BookingDetailsPage: React.FC = () => {
     )
   );
 
-  const dispatch = useDispatch();
+  const [property, setProperty] = useState(
+    properties.find((p) => p.id === booking?.propertyId)
+  );
 
   useEffect(() => {
     if (!booking) {
       navigate("/404");
-    }
-    if (booking) {
+    } else {
       setStartDate(new Date(booking.startDate));
       setEndDate(new Date(booking.endDate));
+      setProperty(properties.find((p) => p.id === booking.propertyId));
     }
   }, [booking, navigate]);
 
@@ -97,11 +113,6 @@ const BookingDetailsPage: React.FC = () => {
         <PageTitle>Booking {id}</PageTitle>
       </PageHeader>
 
-      <PropertyDetail>
-        <h2>Property Details</h2>
-        <p>Description of Property {booking?.propertyId}</p>
-      </PropertyDetail>
-
       <BookingForm onSubmit={handleSubmit}>
         <h3>Edit Booking</h3>
         <DateContainer>
@@ -126,6 +137,25 @@ const BookingDetailsPage: React.FC = () => {
         </DateContainer>
         <SubmitButton type="submit">Edit Booking</SubmitButton>
       </BookingForm>
+
+      {property && (
+        <PropertyDetail>
+          <PropertyImage
+            src={property.imageUrls[0] || "defaultImage.jpg"}
+            alt={property.name}
+          />
+          <h2>{property.name}</h2>
+          <DetailItem>
+            <strong>Description:</strong> {property.description}
+          </DetailItem>
+          <DetailItem>
+            <strong>Address:</strong> {property.address}
+          </DetailItem>
+          <DetailItem>
+            <strong>Price Per Day:</strong> ${property.pricePerDay.toFixed(2)}
+          </DetailItem>
+        </PropertyDetail>
+      )}
     </PageContainer>
   );
 };
