@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
+import React from "react";
+import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { colors } from "./../styles/theme";
+import { colors } from "../styles/theme";
 
 const StyledDatePicker = styled(DatePicker)`
   font-family: "Helvetica Neue", sans-serif;
@@ -12,6 +12,8 @@ const StyledDatePicker = styled(DatePicker)`
   padding: 10px;
   font-size: 16px;
   color: ${colors.text};
+  width: auto;
+  box-sizing: border-box; // Add this line
 
   &:focus {
     border-color: ${colors.primary};
@@ -46,15 +48,13 @@ const StyledDatePicker = styled(DatePicker)`
   }
 `;
 
-const DatePickerComponent: React.FC = () => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const today = new Date();
+interface DatePickerComponentProps extends ReactDatePickerProps {}
 
+const DatePickerComponent: React.FC<DatePickerComponentProps> = (props) => {
   return (
     <StyledDatePicker
-      selected={startDate}
-      onChange={(date: Date | null) => setStartDate(date)}
-      minDate={today} // Set the minimum date to today
+      shouldCloseOnSelect={true} // Ensure the picker closes after selection
+      {...props}
     />
   );
 };

@@ -1,30 +1,11 @@
-import DatePickerComponent from "../components/DatePciker";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";
 import styled from "styled-components";
-
-interface Booking {
-  id: number;
-  startDate: string; // ISO date string format (e.g., "2023-01-01")
-  endDate: string;
-  propertyId: number;
-}
-
-const bookings: Booking[] = [
-  {
-    id: 1,
-    startDate: "2023-12-20",
-    endDate: "2023-12-27",
-    propertyId: 101,
-  },
-  {
-    id: 2,
-    startDate: "2023-12-15",
-    endDate: "2023-12-22",
-    propertyId: 102,
-  },
-];
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store";
+import { removeBooking } from "../features/bookings/bookingsSlice";
 
 const BookingList = styled.ul`
   list-style: none;
@@ -52,8 +33,12 @@ const BookingInfo = styled.div`
 `;
 
 const BookingsPage: React.FC = () => {
-  const handleBookingClick = (bookingId: number) => {
-    console.log("Clicked booking with ID:", bookingId);
+  const bookings = useSelector((state: RootState) => state.bookings.bookings);
+  const dispatch = useDispatch();
+
+  const handleRemoveBooking = (bookingId: number) => {
+    dispatch(removeBooking(bookingId));
+    console.log("Removed booking with ID:", bookingId);
   };
 
   return (
@@ -65,7 +50,7 @@ const BookingsPage: React.FC = () => {
         {bookings.map((booking) => (
           <BookingCard
             key={booking.id}
-            onClick={() => handleBookingClick(booking.id)}
+            onClick={() => handleRemoveBooking(booking.id)} // Change to appropriate handler
           >
             <BookingInfo>
               <div>Booking ID: {booking.id}</div>
@@ -76,7 +61,6 @@ const BookingsPage: React.FC = () => {
           </BookingCard>
         ))}
       </BookingList>
-      <DatePickerComponent />
     </PageContainer>
   );
 };
