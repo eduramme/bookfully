@@ -9,7 +9,7 @@ function App() {
       <Provider store={store}>
         <AppRoutes />
         <Toaster
-          position="bottom-right"
+          position="bottom-center"
           toastOptions={{
             style: {
               border: "1px solid #00C851",

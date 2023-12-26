@@ -128,7 +128,7 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
             Checkin:
             <DatePickerComponent
               minDate={today}
-              maxDate={endDate}
+              maxDate={moment(endDate).subtract(1, "days").toDate()}
               selected={startDate}
               onChange={setStartDate}
               shouldCloseOnSelect={true}
@@ -137,7 +137,11 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
           <DateContainer>
             Checkout:
             <DatePickerComponent
-              minDate={startDate}
+              minDate={
+                startDate
+                  ? moment(startDate).add(1, "days").toDate()
+                  : moment(today).add(1, "days").toDate()
+              }
               selected={endDate}
               onChange={setEndDate}
               shouldCloseOnSelect={true}
