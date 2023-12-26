@@ -6,9 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { properties } from "../utils/mocks";
-
-import moment from "moment";
 import { useBookingProcess } from "../hooks/useBookingProcess";
+import { formatDate } from "../utils/utils";
 
 const BookingList = styled.ul`
   list-style: none;
@@ -52,16 +51,25 @@ const PropertyImage = styled.img`
   width: 150px;
   object-fit: cover;
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    align-self: center;
+    width: 100%;
+  }
 `;
 
 const DeleteButton = styled.button`
-  /* Add your styling for the delete button here */
   background-color: red;
   color: white;
   padding: 5px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    align-self: center;
+    width: 100%;
+  }
 `;
 
 const BookingsPage: React.FC = () => {
@@ -79,35 +87,47 @@ const BookingsPage: React.FC = () => {
       <PageHeader title={"Bookings"} />
 
       <BookingList>
-        {bookings.map((booking) => {
-          const property = properties.find((p) => p.id === booking?.propertyId);
-          return (
-            <BookingCard
-              key={booking.id}
-              onClick={() => goToBookingDetails(booking.id)}
-            >
-              <PropertyImage
-                src={property?.imageUrls[0] || "defaultImage.jpg"}
-                alt="Property"
-              />
-              <BookingInfo>
-                <div>Booking ID: {booking.id}</div>
-                <div>Property: {property?.name}</div>
-                <div>Start Date: {moment(booking.startDate).format("ll")}</div>
-                <div>End Date: {moment(booking.endDate).format("ll")}</div>
-                <div>Address: {property?.address}</div>
-              </BookingInfo>
-              <DeleteButton
-                onClick={(event) => {
-                  event.stopPropagation(); // Prevents navigating when clicking on delete
-                  removeBookingById(booking.id);
-                }}
+        {bookings.length > 0 ? (
+          bookings.map((booking) => {
+            const property = properties.find(
+              (p) => p.id === booking?.propertyId
+            );
+            return (
+              <BookingCard
+                key={booking.id}
+                onClick={() => goToBookingDetails(booking.id)}
               >
-                Delete
-              </DeleteButton>
-            </BookingCard>
-          );
-        })}
+                <PropertyImage
+                  src={property?.imageUrls[0] || "defaultImage.jpg"}
+                  alt="Property"
+                />
+                <BookingInfo>
+                  <div>
+                    From: <strong>{formatDate(booking.startDate)}</strong>
+                  </div>
+                  <div>
+                    To: <strong>{formatDate(booking.endDate)}</strong>
+                  </div>
+                  <div>Property: {property?.name}</div>
+                  <div>Address: {property?.address}</div>
+                </BookingInfo>
+                <DeleteButton
+                  onClick={(event) => {
+                    event.stopPropagation(); // Prevents navigating when clicking on delete
+                    removeBookingById(booking.id);
+                  }}
+                >
+                  Delete
+                </DeleteButton>
+              </BookingCard>
+            );
+          })
+        ) : (
+          <p>
+            Looks like you haven't made any bookings. Start exploring properties
+            and plan your next stay!
+          </p>
+        )}
       </BookingList>
     </PageContainer>
   );

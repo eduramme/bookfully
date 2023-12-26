@@ -59,6 +59,10 @@ const PriceItem = styled.div`
   align-items: center;
 `;
 
+const TotalPriceItem = styled(PriceItem)`
+  border-top: 1px solid lightgray;
+`;
+
 const SubmitButton = styled.button`
   padding: 12px 20px;
   background-color: ${colors.primary};
@@ -111,7 +115,7 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
     onSubmit(e, startDate, endDate, propertyId, currentBookings);
   };
 
-  const propeyBookings = currentBookings.filter(
+  const propertyBookings = currentBookings.filter(
     (booking) => booking.propertyId === propertyId
   );
 
@@ -141,38 +145,38 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
           </DateContainer>
         </div>
         <PriceItem>
-          <strong>
-            ${propertyPricePerDay} {dif ? ` x ${dif} nights` : ""}
-          </strong>
-          {dif ? `$${dif * propertyPricePerDay}` : "---"}
+          ${propertyPricePerDay} {dif ? ` x ${dif} nights` : ""}
+          <strong>{dif ? `$${dif * propertyPricePerDay}` : "---"}</strong>
         </PriceItem>
         <PriceItem>
-          <strong>Tax price</strong>${propertyTaxes}
+          Tax price <strong>${propertyTaxes}</strong>
         </PriceItem>
-        <PriceItem>
-          <strong>Total</strong>
+        <TotalPriceItem>
+          <h3>Total</h3>
           <strong>
-            {dif ? `$${propertyTaxes + dif * propertyPricePerDay}` : "---"}
+            <h3>
+              {dif ? `$${propertyTaxes + dif * propertyPricePerDay}` : "---"}
+            </h3>
           </strong>
-        </PriceItem>
+        </TotalPriceItem>
         <SubmitButton type="submit">{buttonText}</SubmitButton>
-        {propeyBookings.length > 1 ||
-          (propeyBookings.length === 1 &&
-            propeyBookings[0].id !== ignoredBookingId && (
-              <BookedDatesContainer>
-                <h4>Already Booked Dates:</h4>
-                {propeyBookings.map(
-                  (booking, index) =>
-                    ignoredBookingId !== booking.id &&
-                    propertyId === booking?.propertyId && (
-                      <BookedDate key={index}>
-                        {moment(booking.startDate).format("MMMM Do YYYY")} -{" "}
-                        {moment(booking.endDate).format("MMMM Do YYYY")}
-                      </BookedDate>
-                    )
-                )}
-              </BookedDatesContainer>
-            ))}
+        {(propertyBookings.length > 1 ||
+          (propertyBookings.length === 1 &&
+            propertyBookings[0].id !== ignoredBookingId)) && (
+          <BookedDatesContainer>
+            <h4>Already Booked Dates:</h4>
+            {propertyBookings.map(
+              (booking, index) =>
+                ignoredBookingId !== booking.id &&
+                propertyId === booking?.propertyId && (
+                  <BookedDate key={index}>
+                    {`${moment(booking.startDate).format("MMMM Do YYYY")} - 
+                        ${moment(booking.endDate).format("MMMM Do YYYY")}`}
+                  </BookedDate>
+                )
+            )}
+          </BookedDatesContainer>
+        )}
       </BookingForm>
     </FormContainer>
   );
