@@ -3,34 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import styled from "styled-components";
-import DatePickerComponent from "../components/DatePicker";
-import { colors } from "../styles/theme";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { properties } from "../utils/mocks";
 import { useBookingProcess } from "../hooks/useBookingProcess";
-
-const BookingForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-`;
-
-const SubmitButton = styled.button`
-  padding: 12px 20px;
-  background-color: ${colors.primary};
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-weight: bold;
-  text-transform: uppercase;
-`;
+import { PropertyFeatures } from "../components/PropertyFeatures";
+import PropertyDetailComponent from "../components/PropertyDetailComponent";
+import BookingFormComponent from "../components/BookingFormComponent";
+import { formatDate } from "../utils/utils";
 
 const PropertyDetail = styled.div`
   margin-bottom: 30px;
@@ -40,11 +20,6 @@ const PropertyDetail = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const DateContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const PropertyImage = styled.img`
   width: 100%;
   max-height: 300px;
@@ -52,8 +27,38 @@ const PropertyImage = styled.img`
   border-radius: 8px;
 `;
 
-const DetailItem = styled.div`
-  margin-bottom: 10px;
+const ContentContainer = styled.div`
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+  }
+`;
+
+const PropertyContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const PreviousBookingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const BookingDetailsPage: React.FC = () => {
@@ -86,8 +91,6 @@ const BookingDetailsPage: React.FC = () => {
 
   const { editBooking } = useBookingProcess();
 
-  const today = new Date();
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (booking && startDate && endDate) {
@@ -108,48 +111,54 @@ const BookingDetailsPage: React.FC = () => {
     <PageContainer>
       <PageHeader title={`Booking ${id}`} />
 
-      <BookingForm onSubmit={handleSubmit}>
-        <h3>Edit Booking</h3>
-        <DateContainer>
-          Start Date:
-          <DatePickerComponent
-            minDate={today}
-            maxDate={endDate}
-            selected={startDate}
-            onChange={setStartDate}
-            shouldCloseOnSelect={true}
-          />
-        </DateContainer>
+      {property && booking && (
+        <>
+          <PropertyDetail>
+            <PropertyImage
+              src={property.imageUrls[0] || "defaultImage.jpg"}
+              alt={property.name}
+            />
 
-        <DateContainer>
-          End Date:
-          <DatePickerComponent
-            minDate={startDate}
-            selected={endDate}
-            onChange={setEndDate}
-            shouldCloseOnSelect={true}
-          />
-        </DateContainer>
-        <SubmitButton type="submit">Edit Booking</SubmitButton>
-      </BookingForm>
+            <ContentContainer>
+              <PropertyContentContainer>
+                <PreviousBookingContainer>
+                  <h2>Booking details</h2>
+                  <p>Checkin: {formatDate(booking?.startDate)}</p>
+                  <p>Checkout: {formatDate(booking?.endDate)}</p>
+                </PreviousBookingContainer>
 
-      {property && (
-        <PropertyDetail>
-          <PropertyImage
-            src={property.imageUrls[0] || "defaultImage.jpg"}
-            alt={property.name}
-          />
-          <h2>{property.name}</h2>
-          <DetailItem>
-            <strong>Description:</strong> {property.description}
-          </DetailItem>
-          <DetailItem>
-            <strong>Address:</strong> {property.address}
-          </DetailItem>
-          <DetailItem>
-            <strong>Price Per Day:</strong> ${property.pricePerDay.toFixed(2)}
-          </DetailItem>
-        </PropertyDetail>
+                <PropertyFeatures
+                  maxGuests={property.maxGuests}
+                  bedrooms={property.bedrooms}
+                  beds={property.beds}
+                  bathrooms={property.bathrooms}
+                />
+                <PropertyDetailComponent
+                  description={property.description}
+                  pricePerDay={property.pricePerDay}
+                  taxes={property.taxes}
+                  address={property.address}
+                  amenities={property.amenities}
+                  houseRules={property.houseRules}
+                />
+              </PropertyContentContainer>
+              <BookingFormComponent
+                title="Edit Booking"
+                buttonText="Edit Booking"
+                onSubmit={handleSubmit}
+                startDate={startDate}
+                endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                propertyId={property.id}
+                currentBookings={currentBookings}
+                propertyPricePerDay={property.pricePerDay}
+                propertyTaxes={property.taxes}
+                ignoredBookingId={booking?.id}
+              />
+            </ContentContainer>
+          </PropertyDetail>
+        </>
       )}
     </PageContainer>
   );

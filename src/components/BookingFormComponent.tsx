@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import DatePickerComponent from "../components/DatePicker"; // Adjust path as necessary
-import { Booking } from "../types/booking"; // Adjust path as necessary
+import DatePickerComponent from "../components/DatePicker";
+import { Booking } from "../types/booking";
 import moment from "moment";
 import { colors } from "../styles/theme";
 
-// Define the types for your props here
 interface BookingFormComponentProps {
+  title: string;
+  buttonText: string;
   onSubmit: (
     event: React.FormEvent<HTMLFormElement>,
     startDate: Date | null,
@@ -22,6 +23,7 @@ interface BookingFormComponentProps {
   currentBookings: Booking[];
   propertyPricePerDay: number;
   propertyTaxes: number;
+  ignoredBookingId?: number;
 }
 
 const FormContainer = styled.div`
@@ -85,6 +87,8 @@ const BookedDate = styled.div`
 `;
 
 const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
+  title,
+  buttonText,
   onSubmit,
   startDate,
   endDate,
@@ -94,6 +98,7 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
   currentBookings,
   propertyPricePerDay,
   propertyTaxes,
+  ignoredBookingId,
 }) => {
   const today = new Date();
   const dif =
@@ -106,10 +111,14 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
     onSubmit(e, startDate, endDate, propertyId, currentBookings);
   };
 
+  const propeyBookings = currentBookings.filter(
+    (booking) => booking.propertyId === propertyId
+  );
+
   return (
     <FormContainer>
       <BookingForm onSubmit={handleSubmit}>
-        <h2>${propertyPricePerDay} night</h2>
+        <h2>{title}</h2>
         <div style={{ display: "flex", gap: "20px" }}>
           <DateContainer>
             Checkin:
@@ -131,7 +140,6 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
             />
           </DateContainer>
         </div>
-
         <PriceItem>
           <strong>
             ${propertyPricePerDay} {dif ? ` x ${dif} nights` : ""}
@@ -139,8 +147,7 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
           {dif ? `$${dif * propertyPricePerDay}` : "---"}
         </PriceItem>
         <PriceItem>
-          <strong>Tax price</strong>
-          {propertyTaxes}
+          <strong>Tax price</strong>${propertyTaxes}
         </PriceItem>
         <PriceItem>
           <strong>Total</strong>
@@ -148,18 +155,24 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
             {dif ? `$${propertyTaxes + dif * propertyPricePerDay}` : "---"}
           </strong>
         </PriceItem>
-        <SubmitButton type="submit">Book Now</SubmitButton>
-        {currentBookings.length > 0 && (
-          <BookedDatesContainer>
-            <h4>Already Booked Dates:</h4>
-            {currentBookings.map((booking, index) => (
-              <BookedDate key={index}>
-                {moment(booking.startDate).format("MMMM Do YYYY")} -{" "}
-                {moment(booking.endDate).format("MMMM Do YYYY")}
-              </BookedDate>
+        <SubmitButton type="submit">{buttonText}</SubmitButton>
+        {propeyBookings.length > 1 ||
+          (propeyBookings.length === 1 &&
+            propeyBookings[0].id !== ignoredBookingId && (
+              <BookedDatesContainer>
+                <h4>Already Booked Dates:</h4>
+                {propeyBookings.map(
+                  (booking, index) =>
+                    ignoredBookingId !== booking.id &&
+                    propertyId === booking?.propertyId && (
+                      <BookedDate key={index}>
+                        {moment(booking.startDate).format("MMMM Do YYYY")} -{" "}
+                        {moment(booking.endDate).format("MMMM Do YYYY")}
+                      </BookedDate>
+                    )
+                )}
+              </BookedDatesContainer>
             ))}
-          </BookedDatesContainer>
-        )}
       </BookingForm>
     </FormContainer>
   );

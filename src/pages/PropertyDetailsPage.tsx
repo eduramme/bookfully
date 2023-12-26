@@ -136,6 +136,8 @@ const PropertyDetailsPage: React.FC = () => {
             />
           </PropertyContentContainer>
           <BookingFormComponent
+            title={`$${property.pricePerDay} night`}
+            buttonText="Book Now"
             onSubmit={bookingProcess.createBooking}
             startDate={startDate}
             endDate={endDate}

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { colors } from "../styles/theme";
 
 const HeaderWrapper = styled.header`

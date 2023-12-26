@@ -36,15 +36,15 @@ export const PropertyFeatures = ({
       <DetailText>
         <strong>{maxGuests} Guests</strong>
       </DetailText>
-      -
+      <DetailText>-</DetailText>
       <DetailText>
         <strong>{bedrooms} Bedrooms</strong>
       </DetailText>
-      -
+      <DetailText>-</DetailText>
       <DetailText>
         <strong>{beds} Beds</strong>
       </DetailText>
-      -
+      <DetailText>-</DetailText>
       <DetailText>
         <strong>{bathrooms} Bathrooms</strong>
       </DetailText>
