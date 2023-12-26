@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { removeBooking } from "../features/bookings/bookingsSlice";
 import { useNavigate } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";
-import { properties } from "../utils/properties";
+import { properties } from "../utils/mocks";
 
 import moment from "moment";
+import { useBookingProcess } from "../hooks/useBookingProcess";
 
 const BookingList = styled.ul`
   list-style: none;
@@ -67,14 +67,9 @@ const DeleteButton = styled.button`
 
 const BookingsPage: React.FC = () => {
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRemoveBooking = (event: React.MouseEvent, bookingId: number) => {
-    event.stopPropagation(); // Prevents navigating when clicking on delete
-    dispatch(removeBooking(bookingId));
-    console.log("Removed booking with ID:", bookingId);
-  };
+  const { removeBookingById } = useBookingProcess();
 
   const goToBookingDetails = (bookingId: number) => {
     navigate(`/bookings/${bookingId}`);
@@ -105,7 +100,10 @@ const BookingsPage: React.FC = () => {
                 <div>Address: {property?.address}</div>
               </BookingInfo>
               <DeleteButton
-                onClick={(event) => handleRemoveBooking(event, booking.id)}
+                onClick={(event) => {
+                  event.stopPropagation(); // Prevents navigating when clicking on delete
+                  removeBookingById(booking.id);
+                }}
               >
                 Delete
               </DeleteButton>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { properties } from "../utils/properties";
+import { properties } from "../utils/mocks";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";

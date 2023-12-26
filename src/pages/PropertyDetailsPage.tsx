@@ -1,36 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";
 import styled from "styled-components";
 import DatePickerComponent from "../components/DatePicker";
 import { colors } from "../styles/theme";
-import { useDispatch } from "react-redux";
-import { addBooking } from "../features/bookings/bookingsSlice";
-import { properties } from "../utils/properties";
+import { properties } from "../utils/mocks";
 import moment from "moment";
-import toast from "react-hot-toast";
 import { Booking } from "../types/booking";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-
-const notify = () => {
-  toast.success("Booking created successfully (:", {
-    style: {
-      border: "1px solid green",
-      padding: "16px",
-      color: "green",
-    },
-    iconTheme: {
-      primary: "green",
-      secondary: "#FFFAEE",
-    },
-  });
-};
-
-const notifyError = (message: string) =>
-  toast.error(message || "Booking could not be created.");
+import { useBookingProcess } from "../hooks/useBookingProcess";
 
 const BookingForm = styled.form`
   display: flex;
@@ -172,23 +153,20 @@ const ImageGallery = styled.div`
   margin-top: 20px;
 
   &::-webkit-scrollbar {
-    height: 6px; // Adjust the height of the scrollbar
+    height: 6px;
   }
 
   &::-webkit-scrollbar-track {
-    background: ${colors.lightgray}; // Use a light color that matches your theme
-    border-radius: 10px; // Optional: round the corners of the track
+    background: ${colors.lightgray};
+    border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${colors.primary}; // Use a color that matches your primary theme
-    border-radius: 10px; // Optional: round the corners of the thumb
+    background: ${colors.primary};
+    border-radius: 10px;
 
     &:hover {
-      background: darken(
-        ${colors.primary},
-        10%
-      ); // Slightly darken the thumb on hover
+      background: darken(${colors.primary}, 10%);
     }
   }
 `;
@@ -200,74 +178,22 @@ const PropertyImage = styled.img`
 `;
 
 const PropertyDetailsPage: React.FC = () => {
-  const { id } = useParams();
+  const propertyId = parseInt(useParams().id || "0");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const navigate = useNavigate();
-
-  const dispatch = useDispatch();
 
   const currentBookings = useSelector(
     (state: RootState) => state.bookings.bookings
   );
 
-  const isDateConflicting = (
-    newStartDate: moment.Moment,
-    newEndDate: moment.Moment
-  ) => {
-    return currentBookings.some((booking: Booking) => {
-      const existingStart = moment(booking.startDate);
-      const existingEnd = moment(booking.endDate);
-      return (
-        newStartDate.isBefore(existingEnd, "day") &&
-        newEndDate.isAfter(existingStart, "day") &&
-        booking.propertyId === parseInt(id || "0")
-      );
-    });
-  };
-
   const propertyBookings = currentBookings.filter(
-    (booking: Booking) => booking.propertyId === parseInt(id || "0")
+    (booking: Booking) => booking.propertyId === propertyId
   );
-
-  const handleBooking = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (startDate && endDate && id) {
-      const checkin = moment(startDate);
-      const checkout = moment(endDate);
-
-      if (!isDateConflicting(checkin, checkout)) {
-        try {
-          dispatch(
-            addBooking({
-              id: Date.now(),
-              startDate: checkin.toISOString(),
-              endDate: checkout.toISOString(),
-              propertyId: parseInt(id),
-            })
-          );
-          notify();
-          navigate("/");
-        } catch (error) {
-          console.error("Failed to update booking.", error);
-          notifyError(
-            typeof error === "string" ? error : "An unexpected error occurred."
-          );
-        }
-      } else {
-        notifyError("Selected dates are already booked for this property.");
-      }
-    } else {
-      console.error("Missing start date, end date, or property ID");
-      notifyError("Please ensure all fields are filled correctly.");
-    }
-  };
+  const bookingProcess = useBookingProcess();
 
   const today = new Date();
 
-  const property = properties.filter(
-    (prop) => prop.id === parseInt(id ?? "0")
-  )[0];
+  const property = properties.filter((prop) => prop.id === propertyId)[0];
 
   const checkin = moment(startDate);
   const checkout = moment(endDate);
@@ -338,7 +264,17 @@ const PropertyDetailsPage: React.FC = () => {
             </DetailItem>
           </TextContainer>
           <FormContainer>
-            <BookingForm onSubmit={handleBooking}>
+            <BookingForm
+              onSubmit={(e) =>
+                bookingProcess.createBooking(
+                  e,
+                  startDate,
+                  endDate,
+                  propertyId,
+                  currentBookings
+                )
+              }
+            >
               <h2>${property.pricePerDay} night</h2>
               <div
                 style={{

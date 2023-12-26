@@ -6,10 +6,10 @@ import { PageTitle } from "../components/PageTitle";
 import styled from "styled-components";
 import DatePickerComponent from "../components/DatePicker";
 import { colors } from "../styles/theme";
-import { useSelector, useDispatch } from "react-redux";
-import { editBooking } from "../features/bookings/bookingsSlice";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { properties } from "../utils/properties";
+import { properties } from "../utils/mocks";
+import { useBookingProcess } from "../hooks/useBookingProcess";
 
 const BookingForm = styled.form`
   display: flex;
@@ -60,14 +60,11 @@ const DetailItem = styled.div`
 const BookingDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const booking = useSelector((state: RootState) =>
-    state.bookings.bookings.find(
-      (booking) => booking.id === parseInt(id || "0")
-    )
+    state.bookings.bookings.find((b) => b.id === parseInt(id || "0"))
   );
 
   const [property, setProperty] = useState(
@@ -80,32 +77,22 @@ const BookingDetailsPage: React.FC = () => {
     } else {
       setStartDate(new Date(booking.startDate));
       setEndDate(new Date(booking.endDate));
-      setProperty(properties.find((p) => p.id === booking.propertyId));
+      setProperty(properties.find((p) => p.id === booking?.propertyId));
     }
   }, [booking, navigate]);
+
+  const { editBooking } = useBookingProcess();
+
+  const today = new Date();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (booking && startDate && endDate) {
-      // Note: In a real application, this would likely involve an API call
-      // to update the booking on the server. For this challenge, we're directly
-      // dispatching the editBooking action to update the state locally.
-      try {
-        dispatch(
-          editBooking({
-            ...booking,
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
-          })
-        );
-        navigate("/bookings");
-      } catch (error) {
-        console.log("Failed to update booking.");
-      }
+      editBooking(event, booking, startDate, endDate);
+    } else {
+      console.error("No booking found with the specified ID");
     }
   };
-
-  const today = new Date();
 
   return (
     <PageContainer>
