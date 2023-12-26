@@ -5,7 +5,6 @@ import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
-import { PageTitle } from "../components/PageTitle";
 import { properties } from "../utils/mocks";
 
 import moment from "moment";
@@ -77,9 +76,8 @@ const BookingsPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <PageHeader>
-        <PageTitle>Bookings</PageTitle>
-      </PageHeader>
+      <PageHeader title={"Bookings"} />
+
       <BookingList>
         {bookings.map((booking) => {
           const property = properties.find((p) => p.id === booking?.propertyId);

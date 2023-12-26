@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
-import { PageTitle } from "../components/PageTitle";
 import styled from "styled-components";
 import DatePickerComponent from "../components/DatePicker";
 import { colors } from "../styles/theme";
@@ -107,9 +106,7 @@ const BookingDetailsPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <PageHeader>
-        <PageTitle>Booking {id}</PageTitle>
-      </PageHeader>
+      <PageHeader title={`Booking ${id}`} />
 
       <BookingForm onSubmit={handleSubmit}>
         <h3>Edit Booking</h3>

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import { colors } from "../styles/theme";
 
 const HeaderWrapper = styled.header`
@@ -62,10 +62,11 @@ const LogoContainer = styled.div`
 `;
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <HeaderWrapper>
       <HeaderContainer>
-        <LogoContainer>
+        <LogoContainer onClick={() => navigate("/")}>
           <LogoImage src="/src/assets/logo.png" alt="MyApp Logo" />
           <LogoText>Bookfully</LogoText>
         </LogoContainer>

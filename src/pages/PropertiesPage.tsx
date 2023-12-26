@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { properties } from "../utils/mocks";
 import { PageContainer } from "../components/PageContainer";
 import { PageHeader } from "../components/PageHeader";
-import { PageTitle } from "../components/PageTitle";
 import { colors } from "../styles/theme";
 
 const PropertyGrid = styled.div`
@@ -59,9 +58,8 @@ function PropertiesPage() {
 
   return (
     <PageContainer>
-      <PageHeader>
-        <PageTitle>Properties</PageTitle>
-      </PageHeader>
+      <PageHeader title={"Properties"} />
+
       <PropertyGrid>
         {properties.map((property) => (
           <PropertyCard
