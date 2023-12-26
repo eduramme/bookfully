@@ -10,6 +10,27 @@ import { useDispatch } from "react-redux";
 import { addBooking } from "../features/bookings/bookingsSlice";
 import { properties } from "../utils/properties";
 import moment from "moment";
+import toast from "react-hot-toast";
+import { Booking } from "../types/booking";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+
+const notify = () => {
+  toast.success("Booking created successfully (:", {
+    style: {
+      border: "1px solid green",
+      padding: "16px",
+      color: "green",
+    },
+    iconTheme: {
+      primary: "green",
+      secondary: "#FFFAEE",
+    },
+  });
+};
+
+const notifyError = (message: string) =>
+  toast.error(message || "Booking could not be created.");
 
 const BookingForm = styled.form`
   display: flex;
@@ -77,6 +98,7 @@ const PriceItem = styled.div`
 
 const DetailText = styled.p`
   color: gray;
+  margin: 0;
 `;
 
 const AmenitiesList = styled.ul`
@@ -102,6 +124,7 @@ const ContentContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
+    padding: 0px;
   }
 `;
 
@@ -122,6 +145,22 @@ export const PropertyFeaturesContainer = styled.div`
   flex-wrap: wrap;
   font-size: 0.9em;
   color: #333;
+
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
+`;
+
+const BookedDatesContainer = styled.div`
+  margin-top: 20px;
+  padding: 10px;
+  background-color: ${colors.lightgray};
+  border-radius: 5px;
+`;
+
+const BookedDate = styled.div`
+  color: black;
+  margin-bottom: 5px;
 `;
 
 const HouseRulesList = styled(AmenitiesList)``;
@@ -168,27 +207,59 @@ const PropertyDetailsPage: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const currentBookings = useSelector(
+    (state: RootState) => state.bookings.bookings
+  );
+
+  const isDateConflicting = (
+    newStartDate: moment.Moment,
+    newEndDate: moment.Moment
+  ) => {
+    return currentBookings.some((booking: Booking) => {
+      const existingStart = moment(booking.startDate);
+      const existingEnd = moment(booking.endDate);
+      return (
+        newStartDate.isBefore(existingEnd, "day") &&
+        newEndDate.isAfter(existingStart, "day") &&
+        booking.propertyId === parseInt(id || "0")
+      );
+    });
+  };
+
+  const propertyBookings = currentBookings.filter(
+    (booking: Booking) => booking.propertyId === parseInt(id || "0")
+  );
+
   const handleBooking = (event: React.FormEvent) => {
     event.preventDefault();
     if (startDate && endDate && id) {
-      try {
-        dispatch(
-          addBooking({
-            id: Date.now(), // Temporary way to generate a unique id
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
-            propertyId: parseInt(id),
-          })
-        );
-        console.log(
-          `Booking added for property ${id} from ${startDate} to ${endDate}`
-        );
-        navigate("/");
-      } catch (error) {
-        console.log("Failed to update booking.", error);
+      const checkin = moment(startDate);
+      const checkout = moment(endDate);
+
+      if (!isDateConflicting(checkin, checkout)) {
+        try {
+          dispatch(
+            addBooking({
+              id: Date.now(),
+              startDate: checkin.toISOString(),
+              endDate: checkout.toISOString(),
+              propertyId: parseInt(id),
+            })
+          );
+          notify();
+          navigate("/");
+        } catch (error) {
+          console.error("Failed to update booking.", error);
+          notifyError(
+            typeof error === "string" ? error : "An unexpected error occurred."
+          );
+        }
+      } else {
+        notifyError("Selected dates are already booked for this property.");
       }
     } else {
       console.error("Missing start date, end date, or property ID");
+      notifyError("Please ensure all fields are filled correctly.");
     }
   };
 
@@ -201,8 +272,6 @@ const PropertyDetailsPage: React.FC = () => {
   const checkin = moment(startDate);
   const checkout = moment(endDate);
   const dif = checkout.diff(checkin, "days");
-
-  console.log(dif);
 
   return (
     <PageContainer>
@@ -316,6 +385,17 @@ const PropertyDetailsPage: React.FC = () => {
                 </strong>
               </PriceItem>
               <SubmitButton type="submit">Book Now</SubmitButton>
+              {propertyBookings.length > 0 && (
+                <BookedDatesContainer>
+                  <h4>Already Booked Dates:</h4>
+                  {propertyBookings.map((booking, index) => (
+                    <BookedDate key={index}>
+                      {moment(booking.startDate).format("MMMM Do YYYY")} -{" "}
+                      {moment(booking.endDate).format("MMMM Do YYYY")}
+                    </BookedDate>
+                  ))}
+                </BookedDatesContainer>
+              )}
             </BookingForm>
           </FormContainer>
         </ContentContainer>
