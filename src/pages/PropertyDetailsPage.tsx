@@ -17,7 +17,17 @@ const BookingForm = styled.form`
   padding: 20px;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: rgb(0 0 0 / 12%) 0px 6px 16px;
+  width: 100%;
+`;
+
+const FormContainer = styled.div`
+  width: calc(40% - 60px);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 60px);
+    padding: 20px 10px;
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -29,6 +39,10 @@ const SubmitButton = styled.button`
   border-radius: 5px;
   font-weight: bold;
   text-transform: uppercase;
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+  }
 `;
 
 const PropertyDetail = styled.div`
@@ -37,15 +51,31 @@ const PropertyDetail = styled.div`
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const DateContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const DetailItem = styled.div`
   margin-bottom: 10px;
+`;
+
+const PriceItem = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const DetailText = styled.p`
+  color: gray;
 `;
 
 const AmenitiesList = styled.ul`
@@ -62,6 +92,37 @@ const AmenityItem = styled.li`
   border-radius: 15px;
 `;
 
+const ContentContainer = styled.div`
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+export const PropertyFeaturesContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+  color: #333;
+`;
+
 const HouseRulesList = styled(AmenitiesList)``;
 const HouseRuleItem = styled(AmenityItem)``;
 
@@ -69,6 +130,27 @@ const ImageGallery = styled.div`
   display: flex;
   overflow-x: auto;
   margin-top: 20px;
+
+  &::-webkit-scrollbar {
+    height: 6px; // Adjust the height of the scrollbar
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${colors.lightgray}; // Use a light color that matches your theme
+    border-radius: 10px; // Optional: round the corners of the track
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${colors.primary}; // Use a color that matches your primary theme
+    border-radius: 10px; // Optional: round the corners of the thumb
+
+    &:hover {
+      background: darken(
+        ${colors.primary},
+        10%
+      ); // Slightly darken the thumb on hover
+    }
+  }
 `;
 
 const PropertyImage = styled.img`
@@ -131,73 +213,102 @@ const PropertyDetailsPage: React.FC = () => {
             />
           ))}
         </ImageGallery>
-        <h2>Property Details</h2>
-        <DetailItem>
-          <strong>Description:</strong> {property.description}
-        </DetailItem>
-        <DetailItem>
-          <strong>Price Per Day:</strong> ${property.pricePerDay.toFixed(2)}
-        </DetailItem>
-        <DetailItem>
-          <strong>Taxes:</strong> ${property.taxes.toFixed(2)}
-        </DetailItem>
-        <DetailItem>
-          <strong>Address:</strong> {property.address}
-        </DetailItem>
-        <DetailItem>
-          <strong>Max Guests:</strong> {property.maxGuests}
-        </DetailItem>
-        <DetailItem>
-          <strong>Bedrooms:</strong> {property.bedrooms}
-        </DetailItem>
-        <DetailItem>
-          <strong>Beds:</strong> {property.beds}
-        </DetailItem>
-        <DetailItem>
-          <strong>Bathrooms:</strong> {property.bathrooms}
-        </DetailItem>
-        <DetailItem>
-          <strong>Amenities:</strong>
-          <AmenitiesList>
-            {property.amenities.map((amenity, index) => (
-              <AmenityItem key={index}>{amenity}</AmenityItem>
-            ))}
-          </AmenitiesList>
-        </DetailItem>
-        <DetailItem>
-          <strong>House Rules:</strong>
-          <HouseRulesList>
-            {property.houseRules.map((rule, index) => (
-              <HouseRuleItem key={index}>{rule}</HouseRuleItem>
-            ))}
-          </HouseRulesList>
-        </DetailItem>
+        <ContentContainer>
+          <TextContainer>
+            <PropertyFeaturesContainer>
+              <DetailText>
+                <strong>{property.maxGuests} Guests</strong>
+              </DetailText>
+              -
+              <DetailText>
+                <strong>{property.bedrooms} Bedrooms</strong>
+              </DetailText>
+              -
+              <DetailText>
+                <strong>{property.beds} Beds</strong>
+              </DetailText>
+              -
+              <DetailText>
+                <strong>{property.bathrooms} Bathrooms</strong>
+              </DetailText>
+            </PropertyFeaturesContainer>
+
+            <h2>Property Details</h2>
+            <DetailItem>{property.description}</DetailItem>
+            <DetailItem>
+              <strong>Price Per Day:</strong> ${property.pricePerDay.toFixed(2)}
+            </DetailItem>
+            <DetailItem>
+              <strong>Taxes:</strong> ${property.taxes.toFixed(2)}
+            </DetailItem>
+            <DetailItem>
+              <strong>Address:</strong> {property.address}
+            </DetailItem>
+            <DetailItem>
+              <strong>Amenities:</strong>
+              <AmenitiesList>
+                {property.amenities.map((amenity, index) => (
+                  <AmenityItem key={index}>{amenity}</AmenityItem>
+                ))}
+              </AmenitiesList>
+            </DetailItem>
+            <DetailItem>
+              <strong>House Rules:</strong>
+              <HouseRulesList>
+                {property.houseRules.map((rule, index) => (
+                  <HouseRuleItem key={index}>{rule}</HouseRuleItem>
+                ))}
+              </HouseRulesList>
+            </DetailItem>
+          </TextContainer>
+          <FormContainer>
+            <BookingForm onSubmit={handleBooking}>
+              <h2>${property.pricePerDay} night</h2>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "20px",
+                }}
+              >
+                <DateContainer>
+                  Checkin:
+                  <DatePickerComponent
+                    minDate={today}
+                    maxDate={endDate}
+                    selected={startDate}
+                    onChange={setStartDate}
+                    shouldCloseOnSelect={true}
+                  />
+                </DateContainer>
+
+                <DateContainer>
+                  Checkout:
+                  <DatePickerComponent
+                    minDate={startDate}
+                    selected={endDate}
+                    onChange={setEndDate}
+                    shouldCloseOnSelect={true}
+                  />
+                </DateContainer>
+              </div>
+
+              <PriceItem>
+                <strong>{property.pricePerDay} x 7 nights</strong>
+                $1500
+              </PriceItem>
+              <PriceItem>
+                <strong>Tax price</strong>
+                {property.taxes}
+              </PriceItem>
+              <PriceItem>
+                <strong>Total</strong>
+                <strong>{property.taxes}</strong>
+              </PriceItem>
+              <SubmitButton type="submit">Book Now</SubmitButton>
+            </BookingForm>
+          </FormContainer>
+        </ContentContainer>
       </PropertyDetail>
-
-      <BookingForm onSubmit={handleBooking}>
-        <h3>Create a Booking</h3>
-        <DateContainer>
-          Start Date:
-          <DatePickerComponent
-            minDate={today}
-            maxDate={endDate}
-            selected={startDate}
-            onChange={setStartDate}
-            shouldCloseOnSelect={true}
-          />
-        </DateContainer>
-
-        <DateContainer>
-          End Date:
-          <DatePickerComponent
-            minDate={startDate}
-            selected={endDate}
-            onChange={setEndDate}
-            shouldCloseOnSelect={true}
-          />
-        </DateContainer>
-        <SubmitButton type="submit">Book Now</SubmitButton>
-      </BookingForm>
     </PageContainer>
   );
 };

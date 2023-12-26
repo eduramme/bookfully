@@ -12,8 +12,7 @@ const StyledDatePicker = styled(DatePicker)`
   padding: 10px;
   font-size: 16px;
   color: ${colors.text};
-  width: auto;
-  box-sizing: border-box; // Add this line
+  width: calc(100% - 20px);
 
   &:focus {
     border-color: ${colors.primary};
