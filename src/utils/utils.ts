@@ -6,20 +6,23 @@ export const isDateConflicting = (
   newStartDate: moment.Moment,
   newEndDate: moment.Moment,
   currentBookings: Booking[],
-  propertyId: number
+  propertyId: number,
+  ignoredBookingId?: number
 ) => {
   return currentBookings.some((booking: Booking) => {
+    if (ignoredBookingId && booking.id === ignoredBookingId) {
+      return false;
+    }
+
     const existingStart = moment(booking.startDate);
     const existingEnd = moment(booking.endDate);
     return (
-      (newStartDate.isBefore(existingEnd, "day") &&
-        newEndDate.isAfter(existingStart, "day") &&
-        booking.propertyId === propertyId) ||
-      0
+      newStartDate.isBefore(existingEnd, "day") &&
+      newEndDate.isAfter(existingStart, "day") &&
+      booking.propertyId === propertyId
     );
   });
 };
-
 export const calculateTotalPrice = (
   days: number,
   pricePerDay: number,

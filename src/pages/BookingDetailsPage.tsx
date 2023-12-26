@@ -71,6 +71,10 @@ const BookingDetailsPage: React.FC = () => {
     properties.find((p) => p.id === booking?.propertyId)
   );
 
+  const currentBookings = useSelector(
+    (state: RootState) => state.bookings.bookings
+  );
+
   useEffect(() => {
     if (!booking) {
       navigate("/404");
@@ -88,7 +92,14 @@ const BookingDetailsPage: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (booking && startDate && endDate) {
-      editBooking(event, booking, startDate, endDate);
+      editBooking(
+        event,
+        booking,
+        startDate,
+        endDate,
+        booking.propertyId,
+        currentBookings
+      );
     } else {
       console.error("No booking found with the specified ID");
     }

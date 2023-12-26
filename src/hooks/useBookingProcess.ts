@@ -58,12 +58,27 @@ export const useBookingProcess = () => {
     event: React.FormEvent<HTMLFormElement>,
     booking: Booking,
     startDate: Date | null,
-    endDate: Date | null
+    endDate: Date | null,
+    propertyId: number,
+    currentBookings: Booking[]
   ) => {
     event.preventDefault();
     if (startDate && endDate && booking.id) {
       const checkin = moment(startDate);
       const checkout = moment(endDate);
+
+      if (
+        isDateConflicting(
+          checkin,
+          checkout,
+          currentBookings,
+          propertyId,
+          booking.id
+        )
+      ) {
+        notifyError("Selected dates are already booked for this property.");
+        return;
+      }
 
       try {
         await dispatch(
