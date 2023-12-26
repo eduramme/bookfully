@@ -9,6 +9,8 @@ import { PageHeader } from "../components/PageHeader";
 import { PageTitle } from "../components/PageTitle";
 import { properties } from "../utils/properties";
 
+import moment from "moment";
+
 const BookingList = styled.ul`
   list-style: none;
   padding: 0;
@@ -98,8 +100,8 @@ const BookingsPage: React.FC = () => {
               <BookingInfo>
                 <div>Booking ID: {booking.id}</div>
                 <div>Property: {property?.name}</div>
-                <div>Start Date: {booking.startDate}</div>
-                <div>End Date: {booking.endDate}</div>
+                <div>Start Date: {moment(booking.startDate).format("ll")}</div>
+                <div>End Date: {moment(booking.endDate).format("ll")}</div>
                 <div>Address: {property?.address}</div>
               </BookingInfo>
               <DeleteButton

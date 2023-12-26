@@ -9,6 +9,7 @@ import { colors } from "../styles/theme";
 import { useDispatch } from "react-redux";
 import { addBooking } from "../features/bookings/bookingsSlice";
 import { properties } from "../utils/properties";
+import moment from "moment";
 
 const BookingForm = styled.form`
   display: flex;
@@ -197,6 +198,12 @@ const PropertyDetailsPage: React.FC = () => {
     (prop) => prop.id === parseInt(id ?? "0")
   )[0];
 
+  const checkin = moment(startDate);
+  const checkout = moment(endDate);
+  const dif = checkout.diff(checkin, "days");
+
+  console.log(dif);
+
   return (
     <PageContainer>
       <PageHeader>
@@ -293,8 +300,10 @@ const PropertyDetailsPage: React.FC = () => {
               </div>
 
               <PriceItem>
-                <strong>{property.pricePerDay} x 7 nights</strong>
-                $1500
+                <strong>
+                  ${property.pricePerDay} {dif ? " x " + dif + " nights" : ""}
+                </strong>
+                {dif ? "$" + dif * property.pricePerDay : "---"}
               </PriceItem>
               <PriceItem>
                 <strong>Tax price</strong>
@@ -302,7 +311,9 @@ const PropertyDetailsPage: React.FC = () => {
               </PriceItem>
               <PriceItem>
                 <strong>Total</strong>
-                <strong>{property.taxes}</strong>
+                <strong>
+                  {dif ? property.taxes + dif * property.pricePerDay : "---"}
+                </strong>
               </PriceItem>
               <SubmitButton type="submit">Book Now</SubmitButton>
             </BookingForm>
