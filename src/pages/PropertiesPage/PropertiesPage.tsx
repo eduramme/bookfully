@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { properties } from "../../utils/mocks";
+import { mockProperties } from "../../utils/mocks";
 import { PageContainer } from "../../components/PageContainer";
 import { PageHeader } from "../../components/PageHeader";
 import { colors } from "../../styles/theme";
@@ -61,7 +61,7 @@ function PropertiesPage() {
       <PageHeader title={"Properties"} />
 
       <PropertyGrid>
-        {properties.map((property) => (
+        {mockProperties.map((property) => (
           <PropertyCard
             key={property.id}
             onClick={() => goToPropertiesDetails(property.id)}

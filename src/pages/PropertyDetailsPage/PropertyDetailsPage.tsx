@@ -4,7 +4,7 @@ import { PageContainer } from "../../components/PageContainer";
 import { PageHeader } from "../../components/PageHeader";
 import styled from "styled-components";
 import { colors } from "../../styles/theme";
-import { properties } from "../../utils/mocks";
+import { mockProperties } from "../../utils/mocks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useBookingProcess } from "../../hooks/useBookingProcess";
@@ -101,7 +101,7 @@ const PropertyDetailsPage: React.FC = () => {
 
   const bookingProcess = useBookingProcess();
 
-  const property = properties.filter((prop) => prop.id === propertyId)[0];
+  const property = mockProperties.filter((prop) => prop.id === propertyId)[0];
 
   return (
     <PageContainer>

@@ -3,8 +3,6 @@ import { Booking, BookingsState } from "../../types/booking";
 
 const initialState: BookingsState = {
   bookings: [],
-  editLoading: false,
-  editError: null,
 };
 
 const bookingsSlice = createSlice({

@@ -1,3 +1,5 @@
+import { Booking } from "../types/booking";
+
 export interface Property {
   id: number; // Unique identifier for the property
   name: string; // Descriptive name of the property
@@ -14,7 +16,7 @@ export interface Property {
   imageUrls: string[]; // Array of image URLs for the property
 }
 
-export const properties: Property[] = [
+export const mockProperties: Property[] = [
   {
     id: 2,
     name: "Cozy Villa",
@@ -168,4 +170,29 @@ export const properties: Property[] = [
       "https://a0.muscache.com/im/pictures/57e9de9d-2961-4f11-b3db-564248f8c11a.jpg?im_w=720",
     ],
   },
+];
+
+export const mockedBooking1: Booking = {
+  id: 1,
+  startDate: "2023-12-20",
+  endDate: "2023-12-25",
+  propertyId: 101,
+};
+export const mockedBooking2: Booking = {
+  id: 2,
+  startDate: "2024-01-15",
+  endDate: "2024-01-20",
+  propertyId: 102,
+};
+export const mockedBooking3: Booking = {
+  id: 3,
+  startDate: "2023-12-27",
+  endDate: "2023-12-30",
+  propertyId: 101,
+};
+
+export const mockBookings: Booking[] = [
+  mockedBooking1,
+  mockedBooking2,
+  mockedBooking3,
 ];

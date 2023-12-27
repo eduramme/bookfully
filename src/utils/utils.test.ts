@@ -1,35 +1,14 @@
 import { describe, expect, it, test } from "vitest";
 import { calculateTotalPrice, isDateConflicting } from "./utils";
 import moment from "moment";
-import { Booking } from "../types/booking";
-
-const mockBookings: Booking[] = [
-  {
-    id: 1,
-    startDate: "2023-12-20",
-    endDate: "2023-12-25",
-    propertyId: 101,
-  },
-  {
-    id: 2,
-    startDate: "2024-01-15",
-    endDate: "2024-01-20",
-    propertyId: 102,
-  },
-  {
-    id: 3,
-    startDate: "2023-12-27",
-    endDate: "2023-12-30",
-    propertyId: 101,
-  },
-];
+import { mockBookings, mockedBooking1 } from "./mocks";
 
 describe("isDateConflicting", () => {
   it("should return true for overlapping dates", () => {
     const currentBookings = mockBookings;
     const newStartDate = moment("2023-12-24");
     const newEndDate = moment("2023-12-28");
-    const propertyId = 101;
+    const propertyId = mockedBooking1.propertyId;
     expect(
       isDateConflicting(newStartDate, newEndDate, currentBookings, propertyId)
     ).toBe(true);
@@ -39,7 +18,7 @@ describe("isDateConflicting", () => {
     const currentBookings = mockBookings;
     const newStartDate = moment("2024-01-15");
     const newEndDate = moment("2024-01-20");
-    const propertyId = 101;
+    const propertyId = mockedBooking1.propertyId;
     expect(
       isDateConflicting(newStartDate, newEndDate, currentBookings, propertyId)
     ).toBe(false);
@@ -49,7 +28,7 @@ describe("isDateConflicting", () => {
     const currentBookings = mockBookings;
     const newStartDate = moment("2023-12-19");
     const newEndDate = moment("2023-12-20");
-    const propertyId = 101;
+    const propertyId = mockedBooking1.propertyId;
     expect(
       isDateConflicting(newStartDate, newEndDate, currentBookings, propertyId)
     ).toBe(false);
@@ -59,7 +38,7 @@ describe("isDateConflicting", () => {
     const currentBookings = mockBookings;
     const newStartDate = moment("2023-12-19");
     const newEndDate = moment("2023-12-21");
-    const propertyId = 101;
+    const propertyId = mockedBooking1.propertyId;
     expect(
       isDateConflicting(newStartDate, newEndDate, currentBookings, propertyId)
     ).toBe(true);

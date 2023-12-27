@@ -5,7 +5,7 @@ import { PageHeader } from "../../components/PageHeader";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { properties } from "../../utils/mocks";
+import { mockProperties } from "../../utils/mocks";
 import { useBookingProcess } from "../../hooks/useBookingProcess";
 import { PropertyFeatures } from "../../components/PropertyFeatures";
 import PropertyDetailComponent from "../../components/PropertyDetailComponent";
@@ -72,7 +72,7 @@ const BookingDetailsPage: React.FC = () => {
   );
 
   const [property, setProperty] = useState(
-    properties.find((p) => p.id === booking?.propertyId)
+    mockProperties.find((p) => p.id === booking?.propertyId)
   );
 
   const currentBookings = useSelector(
@@ -85,7 +85,7 @@ const BookingDetailsPage: React.FC = () => {
     } else {
       setStartDate(new Date(booking.startDate));
       setEndDate(new Date(booking.endDate));
-      setProperty(properties.find((p) => p.id === booking?.propertyId));
+      setProperty(mockProperties.find((p) => p.id === booking?.propertyId));
     }
   }, [booking, navigate]);
 

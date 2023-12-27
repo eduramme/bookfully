@@ -5,7 +5,7 @@ import { RootState } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { PageContainer } from "../../components/PageContainer";
 import { PageHeader } from "../../components/PageHeader";
-import { properties } from "../../utils/mocks";
+import { mockProperties } from "../../utils/mocks";
 import { useBookingProcess } from "../../hooks/useBookingProcess";
 import { formatDisplayDate } from "../../utils/utils";
 
@@ -89,7 +89,7 @@ const BookingsPage: React.FC = () => {
       <BookingList>
         {bookings.length > 0 ? (
           bookings.map((booking) => {
-            const property = properties.find(
+            const property = mockProperties.find(
               (p) => p.id === booking?.propertyId
             );
             return (

@@ -7,6 +7,4 @@ export interface Booking {
 
 export interface BookingsState {
   bookings: Booking[];
-  editLoading: boolean;
-  editError: string | null;
 }
