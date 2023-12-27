@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PropertiesPage from "../pages/PropertiesPage";
-import BookingsPage from "../pages/BookingsPage";
-import PropertyDetailsPage from "../pages/PropertyDetailsPage";
-import BookingDetailsPage from "../pages/BookingDetailsPage";
+import PropertiesPage from "../pages/PropertiesPage/PropertiesPage";
+import BookingsPage from "../pages/BookingsPage/BookingsPage";
+import PropertyDetailsPage from "../pages/PropertyDetailsPage/PropertyDetailsPage";
+import BookingDetailsPage from "../pages/BookingDetailsPage/BookingDetailsPage";
 import Header from "../components/Header";
 import styled from "styled-components";
 import { colors } from "../styles/theme";

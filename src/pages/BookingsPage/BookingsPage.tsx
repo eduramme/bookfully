@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { PageContainer } from "../components/PageContainer";
-import { PageHeader } from "../components/PageHeader";
-import { properties } from "../utils/mocks";
-import { useBookingProcess } from "../hooks/useBookingProcess";
-import { formatDate } from "../utils/utils";
+import { PageContainer } from "../../components/PageContainer";
+import { PageHeader } from "../../components/PageHeader";
+import { properties } from "../../utils/mocks";
+import { useBookingProcess } from "../../hooks/useBookingProcess";
+import { formatDisplayDate } from "../../utils/utils";
 
 const BookingList = styled.ul`
   list-style: none;
@@ -103,10 +103,11 @@ const BookingsPage: React.FC = () => {
                 />
                 <BookingInfo>
                   <div>
-                    From: <strong>{formatDate(booking.startDate)}</strong>
+                    From:{" "}
+                    <strong>{formatDisplayDate(booking.startDate)}</strong>
                   </div>
                   <div>
-                    To: <strong>{formatDate(booking.endDate)}</strong>
+                    To: <strong>{formatDisplayDate(booking.endDate)}</strong>
                   </div>
                   <div>Property: {property?.name}</div>
                   <div>Address: {property?.address}</div>

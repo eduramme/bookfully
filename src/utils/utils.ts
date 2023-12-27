@@ -23,15 +23,16 @@ export const isDateConflicting = (
     );
   });
 };
+
 export const calculateTotalPrice = (
   days: number,
   pricePerDay: number,
   tax: number
 ) => {
-  return tax + days + pricePerDay;
+  return tax + days * pricePerDay;
 };
 
-export const formatDate = (date: string) => {
+export const formatDisplayDate = (date: string) => {
   return moment(date).format("MMMM Do YYYY");
 };
 

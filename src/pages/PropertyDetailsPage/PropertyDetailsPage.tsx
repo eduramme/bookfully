@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { PageContainer } from "../components/PageContainer";
-import { PageHeader } from "../components/PageHeader";
+import { PageContainer } from "../../components/PageContainer";
+import { PageHeader } from "../../components/PageHeader";
 import styled from "styled-components";
-import { colors } from "../styles/theme";
-import { properties } from "../utils/mocks";
+import { colors } from "../../styles/theme";
+import { properties } from "../../utils/mocks";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { useBookingProcess } from "../hooks/useBookingProcess";
-import { PropertyFeatures } from "../components/PropertyFeatures";
-import BookingFormComponent from "../components/BookingFormComponent";
-import PropertyDetailComponent from "../components/PropertyDetailComponent";
+import { RootState } from "../../store";
+import { useBookingProcess } from "../../hooks/useBookingProcess";
+import { PropertyFeatures } from "../../components/PropertyFeatures";
+import BookingFormComponent from "../../components/BookingFormComponent";
+import PropertyDetailComponent from "../../components/PropertyDetailComponent";
 
 const PropertyDetail = styled.div`
   margin-bottom: 30px;

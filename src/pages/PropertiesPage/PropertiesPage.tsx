@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { properties } from "../utils/mocks";
-import { PageContainer } from "../components/PageContainer";
-import { PageHeader } from "../components/PageHeader";
-import { colors } from "../styles/theme";
+import { properties } from "../../utils/mocks";
+import { PageContainer } from "../../components/PageContainer";
+import { PageHeader } from "../../components/PageHeader";
+import { colors } from "../../styles/theme";
 
 const PropertyGrid = styled.div`
   display: grid;

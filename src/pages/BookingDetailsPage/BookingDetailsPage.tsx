@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { PageContainer } from "../components/PageContainer";
-import { PageHeader } from "../components/PageHeader";
+import { PageContainer } from "../../components/PageContainer";
+import { PageHeader } from "../../components/PageHeader";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { properties } from "../utils/mocks";
-import { useBookingProcess } from "../hooks/useBookingProcess";
-import { PropertyFeatures } from "../components/PropertyFeatures";
-import PropertyDetailComponent from "../components/PropertyDetailComponent";
-import BookingFormComponent from "../components/BookingFormComponent";
-import { formatDate } from "../utils/utils";
+import { RootState } from "../../store";
+import { properties } from "../../utils/mocks";
+import { useBookingProcess } from "../../hooks/useBookingProcess";
+import { PropertyFeatures } from "../../components/PropertyFeatures";
+import PropertyDetailComponent from "../../components/PropertyDetailComponent";
+import BookingFormComponent from "../../components/BookingFormComponent";
+import { formatDisplayDate } from "../../utils/utils";
 
 const PropertyDetail = styled.div`
   margin-bottom: 30px;
@@ -123,8 +123,8 @@ const BookingDetailsPage: React.FC = () => {
               <PropertyContentContainer>
                 <PreviousBookingContainer>
                   <h2>Booking details</h2>
-                  <p>Checkin: {formatDate(booking?.startDate)}</p>
-                  <p>Checkout: {formatDate(booking?.endDate)}</p>
+                  <p>Checkin: {formatDisplayDate(booking?.startDate)}</p>
+                  <p>Checkout: {formatDisplayDate(booking?.endDate)}</p>
                 </PreviousBookingContainer>
 
                 <PropertyFeatures
