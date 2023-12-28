@@ -63,6 +63,7 @@ function PropertiesPage() {
       <PropertyGrid>
         {mockProperties.map((property) => (
           <PropertyCard
+            role="article"
             key={property.id}
             onClick={() => goToPropertiesDetails(property.id)}
           >
