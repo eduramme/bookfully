@@ -1,17 +1,23 @@
+// Import necessary modules and components from React, Redux, and local files.
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+
+// Import UI components and styles.
 import { PageContainer } from "../../components/PageContainer";
 import { PageHeader } from "../../components/PageHeader";
-import styled from "styled-components";
-import { colors } from "../../styles/theme";
-import { mockProperties } from "../../utils/mocks";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { useBookingProcess } from "../../hooks/useBookingProcess";
 import { PropertyFeatures } from "../../components/PropertyFeatures";
 import BookingFormComponent from "../../components/BookingFormComponent";
 import PropertyDetailComponent from "../../components/PropertyDetailComponent";
+import { colors } from "../../styles/theme";
 
+// Import utilities and custom hooks.
+import { mockProperties } from "../../utils/mocks";
+import { RootState } from "../../store";
+import { useBookingProcess } from "../../hooks/useBookingProcess";
+
+// Styled component for property details section with responsive design.
 const PropertyDetail = styled.div`
   margin-bottom: 30px;
   background: white;
@@ -24,6 +30,7 @@ const PropertyDetail = styled.div`
   }
 `;
 
+// Styled component for the content container holding property details and booking form.
 const ContentContainer = styled.div`
   display: flex;
   padding: 20px;
@@ -37,6 +44,7 @@ const ContentContainer = styled.div`
   }
 `;
 
+// Styled component for the container specifically holding property content.
 const PropertyContentContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,6 +55,7 @@ const PropertyContentContainer = styled.div`
   }
 `;
 
+// Styled component for the property features container.
 export const PropertyFeaturesContainer = styled.div`
   display: flex;
   gap: 8px;
@@ -60,6 +69,7 @@ export const PropertyFeaturesContainer = styled.div`
   }
 `;
 
+// Styled component for the image gallery with custom scrollbar.
 const ImageGallery = styled.div`
   display: flex;
   overflow-x: auto;
@@ -84,23 +94,31 @@ const ImageGallery = styled.div`
   }
 `;
 
+// Styled component for individual property images.
 const PropertyImage = styled.img`
   height: 200px;
   margin-right: 10px;
   border-radius: 8px;
 `;
 
+// The PropertyDetailsPage component displays detailed information about a specific property.
 const PropertyDetailsPage: React.FC = () => {
+  // Retrieve the property ID from the URL parameters.
   const propertyId = parseInt(useParams().id || "0");
+
+  // State hooks for managing booking date range.
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
+  // Redux selector to access the current bookings from the store.
   const currentBookings = useSelector(
     (state: RootState) => state.bookings.bookings
   );
 
+  // Custom hook to handle the booking process.
   const bookingProcess = useBookingProcess();
 
+  // Retrieve the specific property details using the property ID.
   const property = mockProperties.filter((prop) => prop.id === propertyId)[0];
 
   return (

@@ -1,10 +1,13 @@
+// Import necessary React hooks, routing, and styling modules.
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { PageContainer } from "../../components/PageContainer";
-import { PageHeader } from "../../components/PageHeader";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+
+// Import Redux store, utility functions, and components.
 import { RootState } from "../../store";
+import { PageContainer } from "../../components/PageContainer";
+import { PageHeader } from "../../components/PageHeader";
 import { mockProperties } from "../../utils/mocks";
 import { useBookingProcess } from "../../hooks/useBookingProcess";
 import { PropertyFeatures } from "../../components/PropertyFeatures";
@@ -12,6 +15,7 @@ import PropertyDetailComponent from "../../components/PropertyDetailComponent";
 import BookingFormComponent from "../../components/BookingFormComponent";
 import { formatDisplayDate } from "../../utils/utils";
 
+// Styled component for the property details section.
 const PropertyDetail = styled.div`
   margin-bottom: 30px;
   background: white;
@@ -20,6 +24,7 @@ const PropertyDetail = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
+// Styled component for the property image.
 const PropertyImage = styled.img`
   width: 100%;
   max-height: 300px;
@@ -27,6 +32,7 @@ const PropertyImage = styled.img`
   border-radius: 8px;
 `;
 
+// Styled component for the content container.
 const ContentContainer = styled.div`
   display: flex;
   padding: 20px;
@@ -40,6 +46,7 @@ const ContentContainer = styled.div`
   }
 `;
 
+// Styled component for the container specifically holding property content.
 const PropertyContentContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,6 +57,7 @@ const PropertyContentContainer = styled.div`
   }
 `;
 
+// Styled component for the previous booking details container.
 const PreviousBookingContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -61,16 +69,19 @@ const PreviousBookingContainer = styled.div`
   }
 `;
 
+// The BookingDetailsPage component displays detailed information about a specific booking.
 const BookingDetailsPage: React.FC = () => {
+  // Retrieve booking ID from URL parameters and initialize navigation hook.
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  // Retrieve the specific booking and all bookings from the Redux store.
   const booking = useSelector((state: RootState) =>
     state.bookings.bookings.find((b) => b.id === parseInt(id || "0"))
   );
 
+  // State hooks for managing booking date range and property details.
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [property, setProperty] = useState(
     mockProperties.find((p) => p.id === booking?.propertyId)
   );
@@ -79,18 +90,22 @@ const BookingDetailsPage: React.FC = () => {
     (state: RootState) => state.bookings.bookings
   );
 
+  // Effect hook to handle component mount and update logic.
   useEffect(() => {
     if (!booking) {
-      navigate("/404");
+      navigate("/404"); // Redirect if booking is not found.
     } else {
+      // Set state for booking details and property associated with the booking.
       setStartDate(new Date(booking.startDate));
       setEndDate(new Date(booking.endDate));
       setProperty(mockProperties.find((p) => p.id === booking?.propertyId));
     }
   }, [booking, navigate]);
 
+  // Custom hook providing functionality to edit bookings.
   const { editBooking } = useBookingProcess();
 
+  // Handler for form submission to edit booking details.
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (booking && startDate && endDate) {

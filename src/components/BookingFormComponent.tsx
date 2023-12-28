@@ -1,3 +1,4 @@
+// Import necessary React module, styled-components, date picker, types, and utilities.
 import React from "react";
 import styled from "styled-components";
 import DatePickerComponent from "../components/DatePicker";
@@ -5,27 +6,30 @@ import { Booking } from "../types/booking";
 import moment from "moment";
 import { colors } from "../styles/theme";
 
+// Define the props for the BookingFormComponent with detailed types and descriptions.
 interface BookingFormComponentProps {
-  title: string;
-  buttonText: string;
+  title: string; // Title of the form.
+  buttonText: string; // Text for the form's submit button.
   onSubmit: (
+    // Function to handle form submission.
     event: React.FormEvent<HTMLFormElement>,
     startDate: Date | null,
     endDate: Date | null,
     propertyId: number,
     currentBookings: Booking[]
   ) => void;
-  startDate: Date | null;
-  endDate: Date | null;
-  setStartDate: (date: Date | null) => void;
-  setEndDate: (date: Date | null) => void;
-  propertyId: number;
-  currentBookings: Booking[];
-  propertyPricePerDay: number;
-  propertyTaxes: number;
-  ignoredBookingId?: number;
+  startDate: Date | null; // Currently selected start date.
+  endDate: Date | null; // Currently selected end date.
+  setStartDate: (date: Date | null) => void; // Function to update the start date.
+  setEndDate: (date: Date | null) => void; // Function to update the end date.
+  propertyId: number; // ID of the property being booked.
+  currentBookings: Booking[]; // Array of current bookings.
+  propertyPricePerDay: number; // Price per day for the property.
+  propertyTaxes: number; // Tax rate for the property.
+  ignoredBookingId?: number; // ID of booking to ignore (useful for editing existing bookings).
 }
 
+// Styled components for styling various parts of the booking form.
 const FormContainer = styled.div`
   width: calc(40% - 60px);
 
@@ -90,6 +94,7 @@ const BookedDate = styled.div`
   margin-bottom: 5px;
 `;
 
+// The BookingFormComponent is responsible for providing a UI to book or edit bookings.
 const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
   title,
   buttonText,
@@ -104,17 +109,20 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
   propertyTaxes,
   ignoredBookingId,
 }) => {
+  // Calculate the difference in days between the start and end dates, if both are set.
   const today = new Date();
   const dif =
     endDate && startDate
       ? moment(endDate).diff(moment(startDate), "days")
       : null;
 
+  // Handler for form submission, calls the passed onSubmit function.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(e, startDate, endDate, propertyId, currentBookings);
   };
 
+  // Filter bookings for the current property, excluding any booking that should be ignored.
   const propertyBookings = currentBookings.filter(
     (booking) => booking.propertyId === propertyId
   );
