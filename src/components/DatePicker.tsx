@@ -13,6 +13,7 @@ const StyledDatePicker = styled(DatePicker)`
   font-size: 16px;
   color: ${colors.text};
   width: calc(100% - 20px);
+  background-color: white;
 
   &:focus {
     border-color: ${colors.primary};
