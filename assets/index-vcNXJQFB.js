@@ -625,7 +625,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   justify-content: center;
   align-items: center;
   cursor: pointer;
-`,PL=()=>{const e=Ao();return P.jsx(SL,{children:P.jsxs(_L,{children:[P.jsxs(bL,{onClick:()=>e("/"),children:[P.jsx(CL,{src:"src/assets/logo.png",alt:"Bookfully Logo"}),P.jsx(xL,{children:"Bookfully"})]}),P.jsxs(DL,{children:[P.jsx(Ky,{to:"/",children:"Properties"}),P.jsx(Ky,{to:"/bookings",children:"Bookings"})]})]})})},EL=H.div`
+`,PL=()=>{const e=Ao();return P.jsx(SL,{children:P.jsxs(_L,{children:[P.jsxs(bL,{onClick:()=>e("/"),children:[P.jsx(CL,{src:"logo.png",alt:"Bookfully Logo"}),P.jsx(xL,{children:"Bookfully"})]}),P.jsxs(DL,{children:[P.jsx(Ky,{to:"/",children:"Properties"}),P.jsx(Ky,{to:"/bookings",children:"Bookings"})]})]})})},EL=H.div`
   font-family: "Helvetica Neue", sans-serif;
   margin: 0 auto;
   background-color: ${Se.background};
