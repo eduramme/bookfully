@@ -7,8 +7,9 @@ import {
   editBooking as editBookingAction,
   removeBooking,
 } from "../features/bookings/bookingsSlice";
-import { isDateConflicting, notifyError, notifySuccess } from "../utils/utils";
+import { notifyError, notifySuccess } from "../utils/utils";
 import { Booking } from "../types/booking";
+import { validateBooking } from "./bookingValidation";
 
 // useBookingProcess is a custom hook that wraps up Redux actions for managing bookings.
 export const useBookingProcess = () => {
@@ -26,20 +27,22 @@ export const useBookingProcess = () => {
     currentBookings: Booking[]
   ) => {
     event.preventDefault(); // Prevent default form submission behavior.
-    // Validation for required fields.
-    if (!startDate || !endDate || !propertyId) {
-      console.error("Missing start date, end date, or property ID");
-      notifyError("Please ensure all fields are filled correctly.");
-      return;
-    }
 
     // Convert dates to moment objects for easy manipulation and comparison.
     const checkin = moment(startDate);
     const checkout = moment(endDate);
 
-    // Check for date conflicts with existing bookings.
-    if (isDateConflicting(checkin, checkout, currentBookings, propertyId)) {
-      notifyError("Selected dates are already booked for this property.");
+    // validate bookings
+    const validationResult = validateBooking(
+      startDate,
+      endDate,
+      propertyId,
+      currentBookings
+    );
+
+    if (!validationResult.isValid) {
+      console.error(validationResult.message);
+      notifyError(validationResult.message || "Validation failed.");
       return;
     }
 
@@ -74,44 +77,41 @@ export const useBookingProcess = () => {
   ) => {
     event.preventDefault(); // Prevent default form submission behavior.
     // Ensure required data is available.
-    if (startDate && endDate && booking.id) {
-      const checkin = moment(startDate);
-      const checkout = moment(endDate);
+    const checkin = moment(startDate);
+    const checkout = moment(endDate);
 
-      // Check for date conflicts, excluding the current booking.
-      if (
-        isDateConflicting(
-          checkin,
-          checkout,
-          currentBookings,
-          propertyId,
-          booking.id
-        )
-      ) {
-        notifyError("Selected dates are already booked for this property.");
-        return;
-      }
+    // Check for date conflicts, excluding the current booking.
+    const validationResult = validateBooking(
+      startDate,
+      endDate,
+      propertyId,
+      currentBookings,
+      booking.id
+    );
 
-      // Attempt to dispatch the action to edit an existing booking.
-      try {
-        await dispatch(
-          editBookingAction({
-            ...booking,
-            startDate: checkin.toISOString(),
-            endDate: checkout.toISOString(),
-          })
-        );
-        notifySuccess("Booking updated successfully");
-        navigate("/bookings"); // Navigate to the bookings page on successful edit.
-      } catch (error) {
-        console.error("Failed to update booking.", error);
-        notifyError("Failed to update booking.");
-      }
-    } else {
-      notifyError(
-        "Please ensure all dates are selected and the booking exists."
-      );
+    if (!validationResult.isValid) {
+      console.error(validationResult.message);
+      notifyError(validationResult.message || "Validation failed.");
+      return;
     }
+
+
+    // Attempt to dispatch the action to edit an existing booking.
+    try {
+      await dispatch(
+        editBookingAction({
+          ...booking,
+          startDate: checkin.toISOString(),
+          endDate: checkout.toISOString(),
+        })
+      );
+      notifySuccess("Booking updated successfully");
+      navigate("/bookings"); // Navigate to the bookings page on successful edit.
+    } catch (error) {
+      console.error("Failed to update booking.", error);
+      notifyError("Failed to update booking.");
+    }
+
   };
 
   // Function to handle the removal of a booking.
@@ -119,7 +119,6 @@ export const useBookingProcess = () => {
     try {
       dispatch(removeBooking(bookingId)); // Dispatch the action to remove a booking.
       notifySuccess("Booking removed successfully");
-      // navigate("/bookings"); // Uncomment if you want to navigate to the bookings page after deletion.
     } catch (error) {
       console.error("Failed to remove booking.", error);
       notifyError("Failed to remove booking.");
