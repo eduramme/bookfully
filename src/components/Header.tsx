@@ -67,7 +67,7 @@ const Header: React.FC = () => {
     <HeaderWrapper>
       <HeaderContainer>
         <LogoContainer onClick={() => navigate("/")}>
-          <LogoImage src="/src/assets/logo.png" alt="MyApp Logo" />
+          <LogoImage src="src/assets/logo.png" alt="Bookfully Logo" />
           <LogoText>Bookfully</LogoText>
         </LogoContainer>
 
