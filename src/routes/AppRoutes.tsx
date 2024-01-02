@@ -16,7 +16,7 @@ const AppContainer = styled.div`
 
 function AppRoutes() {
   return (
-    <Router>
+    <Router basename="/bookfully">
       <AppContainer>
         <Header />
         <Routes>
