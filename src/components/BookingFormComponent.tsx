@@ -163,7 +163,7 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
           <h3>Total</h3>
           <strong>
             <h3>
-              {dif ? `$${propertyTaxes + dif * propertyPricePerDay}` : "---"}
+              {dif ? `$${(propertyTaxes + dif * propertyPricePerDay).toFixed(2)}` : "---"}
             </h3>
           </strong>
         </TotalPriceItem>
