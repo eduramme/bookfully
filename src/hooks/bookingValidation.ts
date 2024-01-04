@@ -33,8 +33,8 @@ export const validateBooking = (
         return { isValid: false, message: "The end date must be at least one day after the start date." };
     }
 
-    if (isDateConflicting(checkin, checkout, currentBookings, propertyId, bookingId)) {
-        return { isValid: false, message: "Selected dates are already booked for this property." };
+    if (isDateConflicting(checkin, checkout, currentBookings, bookingId)) {
+        return { isValid: false, message: "Selected dates are already booked." };
     }
 
     return { isValid: true };

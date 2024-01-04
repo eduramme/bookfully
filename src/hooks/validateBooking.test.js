@@ -44,7 +44,7 @@ describe("validateBooking", () => {
         isDateConflicting.mockReturnValue(true);
         const result = validateBooking(today, dayAfterTomorrow, 1, [], undefined);
         expect(result.isValid).toBe(false);
-        expect(result.message).toBe("Selected dates are already booked for this property.");
+        expect(result.message).toBe("Selected dates are already booked.");
     });
 
     it("should invalidate if the propertyId is less than or equal to 0", () => {

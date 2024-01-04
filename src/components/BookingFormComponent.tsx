@@ -122,10 +122,6 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
     onSubmit(e, startDate, endDate, propertyId, currentBookings);
   };
 
-  // Filter bookings for the current property, excluding any booking that should be ignored.
-  const propertyBookings = currentBookings.filter(
-    (booking) => booking.propertyId === propertyId
-  );
 
   return (
     <FormContainer>
@@ -172,23 +168,42 @@ const BookingFormComponent: React.FC<BookingFormComponentProps> = ({
           </strong>
         </TotalPriceItem>
         <SubmitButton type="submit">{buttonText}</SubmitButton>
-        {(propertyBookings.length > 1 ||
-          (propertyBookings.length === 1 &&
-            propertyBookings[0].id !== ignoredBookingId)) && (
-          <BookedDatesContainer>
-            <h4>Already Booked Dates:</h4>
-            {propertyBookings.map(
-              (booking, index) =>
-                ignoredBookingId !== booking.id &&
-                propertyId === booking?.propertyId && (
-                  <BookedDate key={index}>
-                    {`${moment(booking.startDate).format("MMMM Do YYYY")} - 
+        {(currentBookings.length > 1 ||
+          (currentBookings.length === 1 &&
+            currentBookings[0].id !== ignoredBookingId)) && (
+            <BookedDatesContainer>
+              <h3>Already Booked Dates</h3>
+
+              {currentBookings.some(
+                (booking) =>
+                  ignoredBookingId !== booking.id &&
+                  propertyId === booking?.propertyId) && <h4>This Property:</h4>}
+              {currentBookings.map(
+                (booking, index) =>
+                  ignoredBookingId !== booking.id &&
+                  propertyId === booking?.propertyId && (
+                    <BookedDate key={index}>
+                      {`${moment(booking.startDate).format("MMMM Do YYYY")} - 
                         ${moment(booking.endDate).format("MMMM Do YYYY")}`}
-                  </BookedDate>
-                )
-            )}
-          </BookedDatesContainer>
-        )}
+                    </BookedDate>
+                  )
+              )}
+              {currentBookings.some(
+                (booking) =>
+                  ignoredBookingId !== booking.id &&
+                  propertyId !== booking?.propertyId) && <h4>Other Properties:</h4>}
+              {currentBookings.map(
+                (booking, index) =>
+                  ignoredBookingId !== booking.id &&
+                  propertyId !== booking?.propertyId && (
+                    <BookedDate key={index}>
+                      {`${moment(booking.startDate).format("MMMM Do YYYY")} - 
+                        ${moment(booking.endDate).format("MMMM Do YYYY")}`}
+                    </BookedDate>
+                  )
+              )}
+            </BookedDatesContainer>
+          )}
       </BookingForm>
     </FormContainer>
   );

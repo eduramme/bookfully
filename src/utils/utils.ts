@@ -6,7 +6,6 @@ export const isDateConflicting = (
   newStartDate: moment.Moment,
   newEndDate: moment.Moment,
   currentBookings: Booking[],
-  propertyId: number,
   ignoredBookingId?: number
 ) => {
   return currentBookings.some((booking: Booking) => {
@@ -18,8 +17,7 @@ export const isDateConflicting = (
     const existingEnd = moment(booking.endDate);
     return (
       newStartDate.isBefore(existingEnd, "day") &&
-      newEndDate.isAfter(existingStart, "day") &&
-      booking.propertyId === propertyId
+      newEndDate.isAfter(existingStart, "day") 
     );
   });
 };

@@ -16,8 +16,8 @@ describe("isDateConflicting", () => {
 
   it("should return false for no overlapping dates", () => {
     const currentBookings = mockBookings;
-    const newStartDate = moment("2024-01-15");
-    const newEndDate = moment("2024-01-20");
+    const newStartDate = moment("2024-02-15");
+    const newEndDate = moment("2024-02-20");
     const propertyId = mockedBooking1.propertyId;
     expect(
       isDateConflicting(newStartDate, newEndDate, currentBookings, propertyId)
