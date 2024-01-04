@@ -70,7 +70,6 @@ const Header: React.FC = () => {
           <LogoImage src="logo.png" alt="Bookfully Logo" />
           <LogoText>Bookfully</LogoText>
         </LogoContainer>
-
         <Nav>
           <StyledLink to="/">Properties</StyledLink>
           <StyledLink to="/bookings">Bookings</StyledLink>

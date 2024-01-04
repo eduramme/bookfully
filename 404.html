@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 
+        The meta tag below is used to redirect any 404 (Not Found) errors to the base path of the application.
+        This issue arises when hosting a Single Page Application (SPA) on a platform like GitHub Pages,
+        which serves static files and does not natively support SPAs' client-side routing.
+
+        When a user navigates directly to a path other than the root (e.g., by refreshing the browser
+        on a non-root route), the server tries to find a file at that location. As there's no file
+        corresponding to the path, a 404 error occurs. 
+
+        By redirecting all 404 errors to the base path of the application, the SPA's client-side routing
+        can then take over and handle the intended route properly. 
+
+        It's a workaround necessary because GitHub Pages doesn't offer a way to redirect all non-root requests
+        back to the root by default, which is what's typically required for SPAs to function correctly on direct navigation to non-root paths.
+    -->
+    <meta http-equiv="refresh" content="0; URL='/bookfully/'" />
+</head>
+
+<body>
+    <p>If you are not redirected, <a href="/bookfully/">click here</a>.</p>
+</body>
+
+</html>
