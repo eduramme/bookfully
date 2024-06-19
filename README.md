@@ -2,7 +2,7 @@
 
 ## Introduction
 
-It's a simple yet powerful React application for creating and managing bookings.
+It's a simple yet powerful React application for creating and managing bookings. Live version at https://eduramme.github.io/bookfully
 
 ## Features
 
